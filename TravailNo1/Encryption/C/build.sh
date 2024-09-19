@@ -1,0 +1,1 @@
+gcc -o encryption main.c -I. -Wall -Wextra
