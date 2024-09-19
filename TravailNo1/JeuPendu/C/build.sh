@@ -1,0 +1,1 @@
+gcc -o pendu main.c -I. -Wall -Wextra -lcurl
