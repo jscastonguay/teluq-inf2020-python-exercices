@@ -1,7 +1,7 @@
 # teluq-inf2020-python-exercices
 Exercices du cours INF 2020 - Programmation d'applications avec Python : des jeux au Web
 
-## PRemier travail
+## Premier travail
 
 Voici des exemples de tâches à réaliser:
 
@@ -41,7 +41,14 @@ Voici des exemples de tâches à réaliser:
    ## Nombre premier
    l'algorithme du Crible d'Ératosthène.
 
-   En langage C: sous WSL2
+   Les deux exécution sous WSL2.
+   En langage C:
+   - ~28 secondes
+   En python
+   - ~45 secondes
 
    ## Cryptage et décriptage
    le chiffrement de César ou de Vigenère
+
+   ## Environnement
+   ChatGTP4 pour la génération du code source.

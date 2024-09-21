@@ -14,7 +14,7 @@ def sieve_of_eratosthenes(limit):
     print(primes)
 
 if __name__ == "__main__":
-    limit = 100000000  # Par exemple, trouver tous les nombres premiers jusqu'à 1 million
+    limit = 100000000  # Par exemple, trouver tous les nombres premiers jusqu'à 100 million
 
     start_time = time.time()
     sieve_of_eratosthenes(limit)
