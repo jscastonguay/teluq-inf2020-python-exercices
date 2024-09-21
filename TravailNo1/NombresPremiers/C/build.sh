@@ -1,0 +1,1 @@
+gcc -o premier main.c -I. -Wall -Wextra -lm
