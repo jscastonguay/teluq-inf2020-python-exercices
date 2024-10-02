@@ -36,19 +36,3 @@ Voici des exemples de tâches à réaliser:
    * ~~Simulation d'un système bancaire basique : Un programme qui simule la gestion de comptes bancaires. Il permet de créer des comptes, de consulter le solde d’un compte, d’effectuer des dépôts et des retraits, et de calculer les intérêts à partir d’un taux défini.~~
    * Gestionnaire de tickets de cinéma : Un programme qui permet de réserver des places de cinéma en affichant les sièges disponibles et en permettant à l'utilisateur de sélectionner les siens. Une fois la sélection faite, le programme doit mettre à jour la disponibilité des sièges.
    * Simulation d'un tri par tas (heap sort) : Implémenter l'algorithme du tri par tas, avec un programme qui génère un tableau de nombres aléatoires, construit un tas à partir de ces nombres, puis trie les nombres dans l'ordre croissant.
-
-
-   ## Nombre premier
-   l'algorithme du Crible d'Ératosthène.
-
-   Les deux exécution sous WSL2.
-   En langage C:
-   - ~28 secondes
-   En python
-   - ~45 secondes
-
-   ## Cryptage et décriptage
-   le chiffrement de César ou de Vigenère
-
-   ## Environnement
-   ChatGTP4 pour la génération du code source.
