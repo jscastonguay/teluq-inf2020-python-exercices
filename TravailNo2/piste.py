@@ -19,8 +19,8 @@ class Ligne:
         self.pos_x: int = pos_x
         self.pos_y: int = pos_y
         
-        self.point_gauche: tuple[int, int] = (pos_x, self.pos_y)
-        self.point_droite: tuple[int, int] = (pos_x + self.longeur_ligne, self.pos_y)
+        self.point_gauche: list[int, int] = [pos_x, self.pos_y]
+        self.point_droite: list[int, int] = [pos_x + self.longeur_ligne, self.pos_y]
         
     def dessine(self, fenetre: Surface):
         draw.line(fenetre, Color('white'), self.point_gauche, self.point_droite, LARGEUR_BORDURE)
@@ -28,8 +28,8 @@ class Ligne:
     def bouge(self, vitesse: int) -> bool:
         '''Retourne true si la ligne doit être détruite.
         '''
-        self.point_gauche[0] - vitesse
-        self.point_droite[0] - vitesse
+        self.point_gauche[0] = self.point_gauche[0] - vitesse
+        self.point_droite[0] = self.point_droite[0] - vitesse
         return self.point_gauche[0] < 0 and self.point_droite[0] < 0
 
 
@@ -64,25 +64,31 @@ class Voie:
                 
                     
     def _dessine_lignes(self, fenetre: Surface) -> None:
-        # TODO Verifier si le if est nécessaire
         if self.lignes_haut:
             for ligne in self.lignes_haut:
                 ligne.dessine(fenetre)
-                
-        # TODO Verifier si le if est nécessaire
         if self.lignes_bas:
             for ligne in self.lignes_bas:
                 ligne.dessine(fenetre)
+                
+    def _bouge_lignes(self, vitesse):
+        if self.lignes_haut:
+            for ligne in self.lignes_haut:
+                a_enlever = ligne.bouge(vitesse)
+                if a_enlever:
+                    self.lignes_haut.remove(ligne)
+        if self.lignes_bas:
+            for ligne in self.lignes_bas:
+                a_enlever = ligne.bouge(vitesse)
+                if a_enlever:
+                    self.lignes_bas.remove(ligne)
         
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
         draw.rect(fenetre, Color('gray'), self.rect)
+        self._bouge_lignes(vitesse)
+        self._construit_lignes()
         self._dessine_lignes(fenetre)
-        # if self.lignes_haut:
-        #     ligne = Ligne(200, self.rect.top, 50)
-        #     ligne.dessine(fenetre)
-        # if self.lignes_bas:
-        #     ligne = Ligne(200, self.rect.bottom, 50)
-        #     ligne.dessine(fenetre)
+        
         
 
 class Piste:
@@ -91,7 +97,7 @@ class Piste:
         self.vitesse: int = 0
         self.rect: Rect = Rect((0, MARGE), (largeur,hauteur-2*MARGE))
         
-        self.voies: list = []
+        self.voies: list[Voie] = []
         for i in range(NB_DE_VOIES):
             self.voies.append(Voie(self.rect, i, ligne_haut = (i != 0)))
     

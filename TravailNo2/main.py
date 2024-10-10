@@ -21,17 +21,24 @@ def main():
     
     horloge = pygame.time.Clock()
     
+    vitesse: int = 0
+    
     fin = False
     while not fin:
-        event = pygame.event.wait()
+        event = pygame.event.poll()
         if event.type == pygame.QUIT:
             fin = True 
-        elif event.type == pygame.MOUSEBUTTONUP:
-            pass
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                vitesse = vitesse - 1
+                vitesse = max(0, vitesse)
+            if event.key == pygame.K_RIGHT:
+                vitesse = vitesse + 1
+                vitesse = min(vitesse, 20)
         else:
         
             fenetre.fill(Color('black'))
-            piste.dessine(fenetre, 0)
+            piste.dessine(fenetre, vitesse)
             pygame.display.flip()
             horloge.tick(60)
     
