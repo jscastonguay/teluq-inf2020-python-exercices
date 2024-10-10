@@ -19,6 +19,8 @@ def main():
     
     piste = Piste(LARGEUR_FENETRE, HAUTEUR_FENETRE)
     
+    horloge = pygame.time.Clock()
+    
     fin = False
     while not fin:
         event = pygame.event.wait()
@@ -26,9 +28,12 @@ def main():
             fin = True 
         elif event.type == pygame.MOUSEBUTTONUP:
             pass
+        else:
         
-        piste.dessine(fenetre)
-        pygame.display.flip()
+            fenetre.fill(Color('black'))
+            piste.dessine(fenetre, 0)
+            pygame.display.flip()
+            horloge.tick(60)
     
     pygame.quit()
 
