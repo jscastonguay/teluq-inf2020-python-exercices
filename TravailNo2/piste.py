@@ -105,6 +105,14 @@ class Piste:
         draw.line(fenetre, Color('white'), self.rect.topleft, self.rect.topright, LARGEUR_BORDURE)
         draw.line(fenetre, Color('white'), self.rect.bottomleft, self.rect.bottomright, LARGEUR_BORDURE)
         
+    def get_nb_voies(self) -> int:
+        return NB_DE_VOIES
+    
+    def get_voie(self, no_voie: int) -> Voie:
+        index = max(no_voie, 0)
+        index = min(index, NB_DE_VOIES - 1)
+        return self.voies[index]
+        
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
         for i in range(NB_DE_VOIES):
             self.voies[i].dessine(fenetre, vitesse)

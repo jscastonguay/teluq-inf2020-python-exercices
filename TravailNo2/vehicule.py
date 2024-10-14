@@ -17,7 +17,6 @@ class Vehicule:
         self.vehicule_joueur: bool = vehicule_joueur
         
         if voie:
-            self.rect.centerx = voie.rect.centerx
             self.rect.centery = voie.rect.centery
         
         self.couleur_corp = self._get_courleur_aleatoire()
@@ -104,20 +103,20 @@ class Vehicule:
         left = left - 2 * self.rect.width * MARGE
         draw.rect(fenetre, Color('black'), ((left, top),(width,height)))
 
-    def bouge(self, vitesse: int, voie: Voie = None):
+    def bouge(self, vitesse_pilote: int, voie: Voie = None):
         
         vitesse_x: int = 0
         vitesse_y: int = 0
         
         if not self.vehicule_joueur:
-            vitesse_x = vitesse
+            vitesse_x = self.vitesse - vitesse_pilote
         
+        # Position y
         self.voie = voie
         if self.voie:
-            difference: int = self.voie.rect.centery - self.rect.centery
-            difference = min(difference, vitesse)
-            difference = max(difference, -vitesse)
-            self.rect.centery = self.rect.centery + difference
+            vitesse_y: int = self.voie.rect.centery - self.rect.centery
+            vitesse_y = min(vitesse_y, vitesse_pilote)
+            vitesse_y = max(vitesse_y, -vitesse_pilote)
 
         self.rect = self.rect.move(vitesse_x, vitesse_y)
     
