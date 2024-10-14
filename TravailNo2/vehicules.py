@@ -9,11 +9,16 @@ from piste import *
 
 class Vehicule:
     
-    def __init__(self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
-        assert voie == None or voie <= 2
+    def __init__(self, vitesse: int, rect: Rect, voie: Voie = None, vehicule_joueur: bool = False) -> None:
+
         self.vitesse: int = vitesse
         self.rect: Rect = rect
-        self.voie = voie
+        self.voie: Voie = voie
+        self.vehicule_joueur: bool = vehicule_joueur
+        
+        if voie:
+            self.rect.centerx = voie.rect.centerx
+            self.rect.centery = voie.rect.centery
         
         self.couleur_corp = self._get_courleur_aleatoire()
         self.couleur_habitacle = self._get_courleur_aleatoire()
@@ -88,20 +93,33 @@ class Vehicule:
         top = self.rect.top
         width = self.rect.width * MARGE
         height = self.rect.height * MARGE
-        draw.rect(fenetre, Color('grey'), ((left, top),(width,height)))
+        draw.rect(fenetre, Color('black'), ((left, top),(width,height)))
         
         left = left + 2 * self.rect.width * MARGE
-        draw.rect(fenetre, Color('grey'), ((left, top),(width,height)))
+        draw.rect(fenetre, Color('black'), ((left, top),(width,height)))
         
         top = top + self.rect.height * (1 - MARGE)
-        draw.rect(fenetre, Color('grey'), ((left, top),(width,height)))
+        draw.rect(fenetre, Color('black'), ((left, top),(width,height)))
         
         left = left - 2 * self.rect.width * MARGE
-        draw.rect(fenetre, Color('grey'), ((left, top),(width,height)))
+        draw.rect(fenetre, Color('black'), ((left, top),(width,height)))
 
     def bouge(self, vitesse: int, voie: Voie = None):
         
-        self.rect = self.rect.move(vitesse, 0)
+        vitesse_x: int = 0
+        vitesse_y: int = 0
+        
+        if not self.vehicule_joueur:
+            vitesse_x = vitesse
+        
+        self.voie = voie
+        if self.voie:
+            difference: int = self.voie.rect.centery - self.rect.centery
+            difference = min(difference, vitesse)
+            difference = max(difference, -vitesse)
+            self.rect.centery = self.rect.centery + difference
+
+        self.rect = self.rect.move(vitesse_x, vitesse_y)
     
     
 

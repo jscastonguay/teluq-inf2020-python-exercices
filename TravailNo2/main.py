@@ -7,6 +7,7 @@ import pygame
 from pygame import Color
 
 from piste import Piste
+from vehicules import *
 
 def main():
     pygame.init()
@@ -22,6 +23,14 @@ def main():
     horloge = pygame.time.Clock()
     
     vitesse: int = 0
+    voie_joueur = 1
+    
+    
+    # TODO récupérer la voie autrement que par l'Accès direct: piste.voies[voie_pilote]
+    
+    mon_vehicule = Vehicule(0, Rect((0, 0), (200, 100)), piste.voies[voie_joueur], vehicule_joueur=True)
+    
+    
     
     fin = False
     while not fin:
@@ -35,10 +44,24 @@ def main():
             if event.key == pygame.K_RIGHT:
                 vitesse = vitesse + 1
                 vitesse = min(vitesse, 20)
+            if event.key == pygame.K_UP:
+                
+                
+                #TODO Doit gèrer l'Accès aux voies par la piste
+                voie_joueur = max(voie_joueur - 1, 0)
+                
+            if event.key == pygame.K_DOWN:
+                
+                #TODO Doit gèrer le nombre max de voie différemment, idem pour l'Accès aux voies
+                voie_joueur = min(voie_joueur + 1, 2)
         else:
         
             fenetre.fill(Color('black'))
+            
             piste.dessine(fenetre, vitesse)
+            mon_vehicule.bouge(vitesse, piste.voies[voie_joueur])
+            mon_vehicule.dessine(fenetre)
+            
             pygame.display.flip()
             horloge.tick(60)
     
