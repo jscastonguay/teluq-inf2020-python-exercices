@@ -42,9 +42,7 @@ class Vehicule:
         return random.choice(couleurs)
         
     def dessine(self, fenetre: Surface):
-        
-        #draw.rect(fenetre, Color('white'), ((0, 0),(self.rect.width,self.rect.height)))
-        
+                
         MARGE = 0.15
         LARGEUR_AILERONS = 0.1
         
@@ -112,15 +110,36 @@ class Vehicule:
             vitesse_x = self.vitesse - vitesse_pilote
         
         # Position y
-        self.voie = voie
+        if voie:
+            self.voie = voie
         if self.voie:
             vitesse_y: int = self.voie.rect.centery - self.rect.centery
             vitesse_y = min(vitesse_y, vitesse_pilote)
             vitesse_y = max(vitesse_y, -vitesse_pilote)
 
         self.rect = self.rect.move(vitesse_x, vitesse_y)
+        
+    # Noter dans le rapport la façon d'annoter une classe dans elle même.
+    def ajuste_vitesse(self, autre_vehicule: 'Vehicule'):
+        if autre_vehicule != self:
+            if autre_vehicule.voie == self.voie:
+                if autre_vehicule.rect.left > self.rect.right:
+                    if autre_vehicule.vitesse < self.vitesse:
+                        if autre_vehicule.rect.left - self.rect.right < self.rect.width:
+                            self.vitesse = self.vitesse - 1
+
+    def est_chevauche(self, autre_vehicule: 'Vehicule') -> bool:
+        chevauche: bool = False
+        if autre_vehicule != self:
+            chevauche = self.rect.colliderect(autre_vehicule)
+        return chevauche
     
-    
+    def est_chevauche_liste(self, liste_vehicules: list['Vehicule']) -> bool:
+        chevauche: bool = False
+        for vehicule in liste_vehicules:
+            if self.est_chevauche(vehicule):
+                chevauche = True
+        return chevauche
 
 
 # Test d'intégration

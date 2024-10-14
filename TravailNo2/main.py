@@ -39,15 +39,15 @@ def nettoie_competiteurs(competiteurs: list[Vehicule]):
             competiteurs.remove(competiteur)
         if competiteur.rect.left > LARGEUR_FENETRE and competiteur.rect.right > LARGEUR_FENETRE:
             competiteurs.remove(competiteur)
-    
-
+            
 
 def main():
     
     random.seed()
     
     pygame.init()
-        
+    pygame.font.init()
+    
     fenetre = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
     pygame.display.set_caption('Grand prix formule 1 x 10^6')
 
@@ -66,6 +66,7 @@ def main():
     
     
     compteur: int = int(time.perf_counter()) + 5
+    game_over: bool = False
     fin = False
     while not fin:
         event = pygame.event.poll()
@@ -89,24 +90,43 @@ def main():
                 #TODO Doit gèrer le nombre max de voie différemment, idem pour l'Accès aux voies
                 voie_joueur = min(voie_joueur + 1, piste.get_nb_voies() - 1)
         else:
+            
+            if not game_over:
         
-            fenetre.fill(Color('black'))
-            
-            piste.dessine(fenetre, vitesse)
-            mon_vehicule.bouge(vitesse, piste.get_voie(voie_joueur))
-            mon_vehicule.dessine(fenetre)
-            
-            nettoie_competiteurs(competiteurs)
-            
-            if time.perf_counter() > compteur:
-                compteur = time.perf_counter() + 5
-                vehicule = creer_competiteur(piste, vitesse)
-                if vehicule:
-                    competiteurs.append(vehicule)
+                fenetre.fill(Color('black'))
                 
-            for competiteur in competiteurs:
-                competiteur.bouge(vitesse)
-                competiteur.dessine(fenetre)
+                piste.dessine(fenetre, vitesse)
+                
+                mon_vehicule.bouge(vitesse, piste.get_voie(voie_joueur))
+                mon_vehicule.dessine(fenetre)
+                
+                nettoie_competiteurs(competiteurs)
+                for competiteur1 in competiteurs:
+                    for competiteur2 in competiteurs:
+                        competiteur1.ajuste_vitesse(competiteur2)
+                
+                if time.perf_counter() > compteur:
+                    compteur = time.perf_counter() + 2
+                    vehicule = creer_competiteur(piste, vitesse)
+                    if vehicule:
+                        if not vehicule.est_chevauche_liste(competiteurs):
+                            competiteurs.append(vehicule)
+                    
+                for competiteur in competiteurs:
+                    competiteur.bouge(vitesse)
+                    competiteur.dessine(fenetre)
+                    
+                if mon_vehicule.est_chevauche_liste(competiteurs):
+                    game_over = True
+                    
+            else:
+                
+                # Game over
+                my_font = pygame.font.SysFont('Comic Sans MS', 200)
+                text_surface = my_font.render('Game over', False, Color('red'))
+                textRect = text_surface.get_rect()
+                textRect.center = (LARGEUR_FENETRE / 2, HAUTEUR_FENETRE / 2)
+                fenetre.blit(text_surface, textRect)
             
             pygame.display.flip()
             horloge.tick(60)
