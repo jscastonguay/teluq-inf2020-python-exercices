@@ -135,38 +135,11 @@ class Vehicule:
         return chevauche
     
     def est_chevauche_liste(self, liste_vehicules: list['Vehicule']) -> bool:
+        
+        # TODO Utiliser la prog fonctionnelle ???
+        
         chevauche: bool = False
         for vehicule in liste_vehicules:
             if self.est_chevauche(vehicule):
                 chevauche = True
         return chevauche
-
-
-# Test d'intégration
-if __name__ == "__main__":
-    pygame.init()
-    LARGEUR_FENETRE = 1000
-    HAUTEUR_FENETRE = 400
-    fenetre = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
-    pygame.display.set_caption('Test de visualisation de la voiture')
-    fin = False
-    
-    
-    vehicule = Vehicule(0, Rect((0, 0), (200, 100)))
-    
-    horloge = pygame.time.Clock()
-    
-    while not fin:
-        event = pygame.event.poll()
-        if event.type == pygame.QUIT:
-            fin = True 
-        else:
-            fenetre.fill(Color('black'))        
-            vehicule.dessine(fenetre)
-            pygame.display.flip()
-            
-            vehicule.bouge(1)
-            
-            horloge.tick(60)
-    
-    pygame.quit()

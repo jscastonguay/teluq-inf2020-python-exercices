@@ -16,9 +16,11 @@ HAUTEUR_FENETRE = 800
 VITESSE_MAX = 20
 LONGUEUR_VEHICULE = 200
 LARGEUR_VEHICULE = 100
+PERIODE_CREATION_COMPETITEUR = 2
 
 
-competiteurs: list[Vehicule] = []
+#class NoValueReturned(Exception):
+#    pass
 
 
 def creer_competiteur(piste: Piste, vitesse_courante: int) -> Vehicule:
@@ -30,25 +32,22 @@ def creer_competiteur(piste: Piste, vitesse_courante: int) -> Vehicule:
         nouveau = Vehicule(vitesse_vehicule, Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(no_voie))
     elif vitesse_apparante < 0:
         nouveau = Vehicule(vitesse_vehicule, Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(no_voie))
+#    else:
+#        raise NoValueReturned
+    
     return nouveau
 
 
-def nettoie_competiteurs(competiteurs: list[Vehicule]):
-    for competiteur in competiteurs:
-        if competiteur.rect.left < 0 and competiteur.rect.right < 0:
-            competiteurs.remove(competiteur)
-        if competiteur.rect.left > LARGEUR_FENETRE and competiteur.rect.right > LARGEUR_FENETRE:
-            competiteurs.remove(competiteur)
-            
-
 def main():
+    
+    competiteurs: list[Vehicule] = []
     
     random.seed()
     
     pygame.init()
     pygame.font.init()
     
-    fenetre = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
+    fenetre: Surface = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
     pygame.display.set_caption('Grand prix formule 1 x 10^6')
 
     
@@ -65,7 +64,7 @@ def main():
     mon_vehicule = Vehicule(0, Rect((0.2 * LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(voie_joueur), vehicule_joueur=True)
     
     
-    compteur: int = int(time.perf_counter()) + 5
+    compteur: int = int(time.perf_counter()) + 5 # Donne 5 secondes de délai avant l'arrivé des premiers véhicules
     game_over: bool = False
     fin = False
     while not fin:
@@ -99,14 +98,16 @@ def main():
                 
                 mon_vehicule.bouge(vitesse, piste.get_voie(voie_joueur))
                 mon_vehicule.dessine(fenetre)
+                                
+                # Nettoie les compétiteurs en ne gardant que ceux qui sont visibles.
+                competiteurs = list(filter(lambda v : fenetre.get_rect().colliderect(v.rect), competiteurs))
                 
-                nettoie_competiteurs(competiteurs)
                 for competiteur1 in competiteurs:
                     for competiteur2 in competiteurs:
                         competiteur1.ajuste_vitesse(competiteur2)
                 
                 if time.perf_counter() > compteur:
-                    compteur = time.perf_counter() + 2
+                    compteur = time.perf_counter() + PERIODE_CREATION_COMPETITEUR
                     vehicule = creer_competiteur(piste, vitesse)
                     if vehicule:
                         if not vehicule.est_chevauche_liste(competiteurs):

@@ -56,6 +56,8 @@ class Voie:
             while self.lignes_haut[-1].point_droite[0] <= self.rect.right:
                 self.lignes_haut.append(Ligne(self.lignes_haut[-1].point_droite[0] + DISTANCE_ENTRE_LIGNES, self.rect.top, LONGUEUR_LIGNES))
                 
+        # TODO Utiliser des exceptions ici au lieu du test avec le 'if self.lignes_haut != None' ???
+                
         if self.lignes_bas != None:
             if len(self.lignes_bas) == 0:
                 self.lignes_bas.append(Ligne(0, self.rect.bottom, LONGUEUR_LIGNES))
@@ -72,6 +74,10 @@ class Voie:
                 ligne.dessine(fenetre)
                 
     def _bouge_lignes(self, vitesse):
+        
+        # TODO possibilité de programmation fonctionnelle avec filter
+        # TODO possibilité d'utiliser des exceptions au lieu du 'if self.lignes_haut'
+        
         if self.lignes_haut:
             for ligne in self.lignes_haut:
                 a_enlever = ligne.bouge(vitesse)
@@ -97,6 +103,8 @@ class Piste:
         self.vitesse: int = 0
         self.rect: Rect = Rect((0, MARGE), (largeur,hauteur-2*MARGE))
         
+        
+        # TODO Possibilité de programmation fonctionnelle ???
         self.voies: list[Voie] = []
         for i in range(NB_DE_VOIES):
             self.voies.append(Voie(self.rect, i, ligne_haut = (i != 0)))
@@ -114,6 +122,8 @@ class Piste:
         return self.voies[index]
         
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
+        
+        # Programmation fonctionnelle avec une lambda ???
         for i in range(NB_DE_VOIES):
             self.voies[i].dessine(fenetre, vitesse)
         
