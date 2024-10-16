@@ -19,23 +19,20 @@ LARGEUR_VEHICULE = 100
 PERIODE_CREATION_COMPETITEUR = 2
 
 
-#class NoValueReturned(Exception):
-#    pass
+class NoValueReturned(Exception):
+    pass
 
 
 def creer_competiteur(piste: Piste, vitesse_courante: int) -> Vehicule:
     no_voie = random.randrange(0, piste.get_nb_voies())
     vitesse_vehicule: int = random.randrange(7, VITESSE_MAX)
     vitesse_apparante: int = vitesse_vehicule - vitesse_courante
-    nouveau: Vehicule = None
     if vitesse_apparante > 0:
-        nouveau = Vehicule(vitesse_vehicule, Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(no_voie))
+        return Vehicule(vitesse_vehicule, Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(no_voie))
     elif vitesse_apparante < 0:
-        nouveau = Vehicule(vitesse_vehicule, Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(no_voie))
-#    else:
-#        raise NoValueReturned
-    
-    return nouveau
+        return Vehicule(vitesse_vehicule, Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)), piste.get_voie(no_voie))
+    else:
+        raise NoValueReturned
 
 
 def main():
@@ -108,10 +105,12 @@ def main():
                 
                 if time.perf_counter() > compteur:
                     compteur = time.perf_counter() + PERIODE_CREATION_COMPETITEUR
-                    vehicule = creer_competiteur(piste, vitesse)
-                    if vehicule:
+                    try:
+                        vehicule = creer_competiteur(piste, vitesse)
                         if not vehicule.est_chevauche_liste(competiteurs):
                             competiteurs.append(vehicule)
+                    except NoValueReturned:
+                        pass
                     
                 for competiteur in competiteurs:
                     competiteur.bouge(vitesse)
