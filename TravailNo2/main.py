@@ -7,6 +7,7 @@ import pygame
 from pygame import Color
 import random
 import time
+import itertools
 
 from piste import Piste
 from vehicule import *
@@ -99,9 +100,10 @@ def main():
                 # Nettoie les compétiteurs en ne gardant que ceux qui sont visibles.
                 competiteurs = list(filter(lambda v : fenetre.get_rect().colliderect(v.rect), competiteurs))
                 
-                for competiteur1 in competiteurs:
-                    for competiteur2 in competiteurs:
-                        competiteur1.ajuste_vitesse(competiteur2)
+                # Ajuste la vitesse lorsqu'une collision est possible entre compétiteurs.
+                for c1, c2 in itertools.combinations(competiteurs, 2):
+                    c1.ajuste_vitesse(c2)
+                    c2.ajuste_vitesse(c1)
                 
                 if time.perf_counter() > compteur:
                     compteur = time.perf_counter() + PERIODE_CREATION_COMPETITEUR
