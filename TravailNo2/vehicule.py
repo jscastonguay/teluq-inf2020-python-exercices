@@ -4,6 +4,8 @@ from pygame import draw
 from pygame import Color
 import pygame
 import random
+import functools
+
 from piste import *
 
 
@@ -135,11 +137,7 @@ class Vehicule:
         return chevauche
     
     def est_chevauche_liste(self, liste_vehicules: list['Vehicule']) -> bool:
-        
-        # TODO Utiliser la prog fonctionnelle ???
-        
-        chevauche: bool = False
-        for vehicule in liste_vehicules:
-            if self.est_chevauche(vehicule):
-                chevauche = True
-        return chevauche
+        try:
+            return functools.reduce(lambda x,y: x or y, map(lambda x: self.est_chevauche(x), liste_vehicules))
+        except TypeError:
+            return False

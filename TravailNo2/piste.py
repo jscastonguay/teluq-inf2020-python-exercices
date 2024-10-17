@@ -59,11 +59,11 @@ class LignePointillee:
     def bouge(self, vitesse):
         
         # TODO possibilité de programmation fonctionnelle avec filter
-        # TODO possibilité d'utiliser des exceptions au lieu du 'if self.lignes_haut'
         for ligne in self.lignes:
             a_enlever = ligne.bouge(vitesse)
             if a_enlever:
                 self.lignes.remove(ligne)
+
 
 class Voie:
     
