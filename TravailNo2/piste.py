@@ -35,10 +35,10 @@ class Ligne:
     
 class LignePointillee:
     
-    def __init__(self, active: bool, pos_x_limite: int = 0, pos_y: int = 0) -> None:
+    def __init__(self, pos_x_limite: int = 0, pos_y: int = 0) -> None:
         self.pos_x_limite = pos_x_limite
         self.pos_y: int = pos_y
-        self.lignes: list[Ligne] = [] if active else None
+        self.lignes: list[Ligne] = []
         self.construit()
         
     def construit(self) -> None:
@@ -46,28 +46,24 @@ class LignePointillee:
         # du rectangle.
         # Attention, la vitesse peut poser problème si elle est plus grande
         # que la longueur d'une ligne plus la distance entre les lignes.
-        if self.lignes != None:
-            if len(self.lignes) == 0:
-                self.lignes.append(Ligne(0, self.pos_y, LONGUEUR_LIGNES))
-            while self.lignes[-1].point_droite[0] <= self.pos_x_limite:
-                self.lignes.append(Ligne(self.lignes[-1].point_droite[0] + DISTANCE_ENTRE_LIGNES, self.pos_y, LONGUEUR_LIGNES))
+        if len(self.lignes) == 0:
+            self.lignes.append(Ligne(0, self.pos_y, LONGUEUR_LIGNES))
+        while self.lignes[-1].point_droite[0] <= self.pos_x_limite:
+            self.lignes.append(Ligne(self.lignes[-1].point_droite[0] + DISTANCE_ENTRE_LIGNES, self.pos_y, LONGUEUR_LIGNES))
                 
     def dessine(self, fenetre: Surface) -> None:
-        if self.lignes != None:
-            for ligne in self.lignes:
-                ligne.dessine(fenetre)
+        for ligne in self.lignes:
+            ligne.dessine(fenetre)
                 
     
     def bouge(self, vitesse):
         
         # TODO possibilité de programmation fonctionnelle avec filter
         # TODO possibilité d'utiliser des exceptions au lieu du 'if self.lignes_haut'
-        
-        if self.lignes != None:
-            for ligne in self.lignes:
-                a_enlever = ligne.bouge(vitesse)
-                if a_enlever:
-                    self.lignes.remove(ligne)
+        for ligne in self.lignes:
+            a_enlever = ligne.bouge(vitesse)
+            if a_enlever:
+                self.lignes.remove(ligne)
 
 class Voie:
     
@@ -77,9 +73,11 @@ class Voie:
         hauteur: int = dimension_piste.height / NB_DE_VOIES
         
         self.rect: Rect = Rect((dimension_piste.topleft[0], dimension_piste.topleft[1] + no * hauteur), (dimension_piste.width, hauteur))
-        self.ligne_pointillee: list[LignePointillee] = [
-            LignePointillee(lignes_haut, self.rect.right, self.rect.top),
-            LignePointillee(lignes_bas, self.rect.right, self.rect.bottom)]
+        self.ligne_pointillee: list[LignePointillee] = []
+        if lignes_haut:
+            self.ligne_pointillee.append(LignePointillee(self.rect.right, self.rect.top))
+        if lignes_bas:
+            self.ligne_pointillee.append(LignePointillee(self.rect.right, self.rect.top))
                 
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
         draw.rect(fenetre, Color('gray'), self.rect)        
