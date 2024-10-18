@@ -115,7 +115,7 @@ class Vehicule:
         if voie:
             self.voie = voie
         if self.voie:
-            vitesse_y: int = self.voie.rect.centery - self.rect.centery
+            vitesse_y = self.voie.rect.centery - self.rect.centery
             vitesse_y = min(vitesse_y, vitesse_pilote)
             vitesse_y = max(vitesse_y, -vitesse_pilote)
 

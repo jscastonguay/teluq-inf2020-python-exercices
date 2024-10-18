@@ -13,17 +13,15 @@ LONGUEUR_LIGNES = 50
 class Ligne:
     
     def __init__(self, pos_x: int, pos_y: int, longeur_ligne: int) -> None:
-        
-        # TODO enlever les 'self' si pas nécessaire
-        self.longeur_ligne: int = longeur_ligne
-        self.pos_x: int = pos_x
-        self.pos_y: int = pos_y
-        
-        self.point_gauche: list[int, int] = [pos_x, self.pos_y]
-        self.point_droite: list[int, int] = [pos_x + self.longeur_ligne, self.pos_y]
+                
+        self.point_gauche: list[int, int] = [pos_x, pos_y]
+        self.point_droite: list[int, int] = [pos_x + longeur_ligne, pos_y]
         
     def dessine(self, fenetre: Surface):
-        draw.line(fenetre, Color('white'), self.point_gauche, self.point_droite, LARGEUR_BORDURE)
+        try:
+            draw.line(fenetre, Color('white'), self.point_gauche, self.point_droite, LARGEUR_BORDURE)
+        except TypeError as Err:
+            print(f"Erreur durant le tracage d'une ligne dans la fonction {Ligne.dessine.__name__}: {Err}") 
         
     def bouge(self, vitesse: int) -> bool:
         '''Retourne true si la ligne doit être détruite.
@@ -34,14 +32,23 @@ class Ligne:
     
     
 class LignePointillee:
+    '''Dessine et fait bouger une ligne pointillée.
+    '''
     
     def __init__(self, pos_x_limite: int = 0, pos_y: int = 0) -> None:
+        '''Le constructeur.
+        
+        De gauche (position 0) à droite....
+        
+        TBD
+        '''
+        
         self.pos_x_limite = pos_x_limite
         self.pos_y: int = pos_y
         self.lignes: list[Ligne] = []
-        self.construit()
+        self._construit()
         
-    def construit(self) -> None:
+    def _construit(self) -> None:
         # Créer des lignes de la position 0 jusqu'à ce qu'il a ait une à l'extérieur 
         # du rectangle.
         # Attention, la vitesse peut poser problème si elle est plus grande
@@ -52,13 +59,12 @@ class LignePointillee:
             self.lignes.append(Ligne(self.lignes[-1].point_droite[0] + DISTANCE_ENTRE_LIGNES, self.pos_y, LONGUEUR_LIGNES))
                 
     def dessine(self, fenetre: Surface) -> None:
+        self._construit()
         for ligne in self.lignes:
             ligne.dessine(fenetre)
                 
     
     def bouge(self, vitesse):
-        
-        # TODO possibilité de programmation fonctionnelle avec filter
         for ligne in self.lignes:
             a_enlever = ligne.bouge(vitesse)
             if a_enlever:
@@ -73,35 +79,33 @@ class Voie:
         hauteur: int = dimension_piste.height / NB_DE_VOIES
         
         self.rect: Rect = Rect((dimension_piste.topleft[0], dimension_piste.topleft[1] + no * hauteur), (dimension_piste.width, hauteur))
-        self.ligne_pointillee: list[LignePointillee] = []
+        self.lignes_pointillees: list[LignePointillee] = []
         if lignes_haut:
-            self.ligne_pointillee.append(LignePointillee(self.rect.right, self.rect.top))
+            self.lignes_pointillees.append(LignePointillee(self.rect.right, self.rect.top))
         if lignes_bas:
-            self.ligne_pointillee.append(LignePointillee(self.rect.right, self.rect.top))
+            self.lignes_pointillees.append(LignePointillee(self.rect.right, self.rect.bottom))
                 
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
         draw.rect(fenetre, Color('gray'), self.rect)        
-        for ligne in self.ligne_pointillee:
+        for ligne in self.lignes_pointillees:
             ligne.bouge(vitesse)
-            ligne.construit()
             ligne.dessine(fenetre)
 
 
 class Piste:
     
     def __init__(self, largeur: int, hauteur: int) -> None:
-        self.vitesse: int = 0
         self.rect: Rect = Rect((0, MARGE), (largeur,hauteur-2*MARGE))
-        
-        
-        # TODO Possibilité de programmation fonctionnelle ???
         self.voies: list[Voie] = []
         for i in range(NB_DE_VOIES):
             self.voies.append(Voie(self.rect, i, lignes_haut = (i != 0)))
     
     def _dessine_bordure(self, fenetre: Surface) -> None:
-        draw.line(fenetre, Color('white'), self.rect.topleft, self.rect.topright, LARGEUR_BORDURE)
-        draw.line(fenetre, Color('white'), self.rect.bottomleft, self.rect.bottomright, LARGEUR_BORDURE)
+        try:
+            draw.line(fenetre, Color('white'), self.rect.topleft, self.rect.topright, LARGEUR_BORDURE)
+            draw.line(fenetre, Color('white'), self.rect.bottomleft, self.rect.bottomright, LARGEUR_BORDURE)
+        except TypeError as Err:
+            print(f"Erreur durant le tracage d'une ligne dans la fonction {Piste._dessine_bordure.__name__}: {Err}")    
         
     def get_nb_voies(self) -> int:
         return NB_DE_VOIES
@@ -112,9 +116,6 @@ class Piste:
         return self.voies[index]
         
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
-        
-        # Programmation fonctionnelle avec une lambda ???
         for i in range(NB_DE_VOIES):
             self.voies[i].dessine(fenetre, vitesse)
-        
         self._dessine_bordure(fenetre)
