@@ -21,6 +21,7 @@ class Ligne:
 
         Args:
             pos_x (int): La position initiale en X de l'extrémité gauche.
+            
             pos_y (int): La position initiale en y de l'extrémité gauche.
             longueur_ligne (int): La longueur de la ligne.
         """
@@ -70,6 +71,7 @@ class LignePointillee:
         Args:
             pos_x_limite (int, optional): La limite à droite de la ligne
             pointillée. Défaut à 0.
+            
             pos_y (int, optional): La position de la ligne en y. Défaut à 0.
         """
         self.pos_x_limite = pos_x_limite
@@ -121,7 +123,7 @@ class Voie:
     def __init__(
         self,
         dimension_piste: Rect,
-        no: int,
+        index: int,
         lignes_haut: bool = False,
         lignes_bas: bool = False,
     ) -> None:
@@ -129,16 +131,20 @@ class Voie:
 
         Args:
             dimension_piste (Rect): Dimension de la voie.
-            no (int): Index de la voie, 
-            lignes_haut (bool, optional): _description_. Defaults to False.
-            lignes_bas (bool, optional): _description_. Defaults to False.
+            index (int): Index de la voie, commence à 0.
+            
+            lignes_haut (bool, optional): True si une ligne pointillée est
+            présent sur le rebord du haut. Défaut à False.
+            
+            lignes_bas (bool, optional): Idem mais pour le rebord du bas.
+            Défaut à False.
         """
-        assert no >= 0 and no < NB_DE_VOIES
+        assert index >= 0 and index < NB_DE_VOIES
 
         hauteur: int = dimension_piste.height / NB_DE_VOIES
 
         self.rect: Rect = Rect(
-            (dimension_piste.topleft[0], dimension_piste.topleft[1] + no * hauteur),
+            (dimension_piste.topleft[0], dimension_piste.topleft[1] + index * hauteur),
             (dimension_piste.width, hauteur),
         )
         self.lignes_pointillees: list[LignePointillee] = []
@@ -152,6 +158,12 @@ class Voie:
             )
 
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
+        """_summary_
+
+        Args:
+            fenetre (Surface): La surface dans laquelle la ligne est dessinée.
+            vitesse (int): La vitesse de la voiture du joueur.
+        """
         draw.rect(fenetre, Color("gray"), self.rect)
         for ligne in self.lignes_pointillees:
             ligne.bouge(vitesse)
@@ -159,8 +171,16 @@ class Voie:
 
 
 class Piste:
+    """Classe dessinant une piste faire de plusieurs voies.
+    """
 
     def __init__(self, largeur: int, hauteur: int) -> None:
+        """Constructeur de la piste.
+
+        Args:
+            largeur (int): Larguer de la piste.
+            hauteur (int): Hauteur de la piste.
+        """
         self.rect: Rect = Rect((0, MARGE), (largeur, hauteur - 2 * MARGE))
         self.voies: list[Voie] = []
         for i in range(NB_DE_VOIES):
@@ -188,14 +208,33 @@ class Piste:
             )
 
     def get_nb_voies(self) -> int:
+        """Retourne le nombre de voies au total de la piste.
+
+        Returns:
+            int: Le nombre de voies total de la piste.
+        """
         return NB_DE_VOIES
 
-    def get_voie(self, no_voie: int) -> Voie:
-        index = max(no_voie, 0)
+    def get_voie(self, index_voie: int) -> Voie:
+        """Retourne une voie donnée.
+
+        Args:
+            index_voie (int): L'index de la voie. L'index commence à 0.
+
+        Returns:
+            Voie: La voie sélectionnée par l'index.
+        """
+        index = max(index_voie, 0)
         index = min(index, NB_DE_VOIES - 1)
         return self.voies[index]
 
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
+        """Dessine la piste.
+
+        Args:
+            fenetre (Surface): La surface dans laquelle la piste est dessinée.
+            vitesse (int): La vitesse du joueur.
+        """
         for i in range(NB_DE_VOIES):
             self.voies[i].dessine(fenetre, vitesse)
         self._dessine_bordure(fenetre)

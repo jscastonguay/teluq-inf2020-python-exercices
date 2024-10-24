@@ -21,10 +21,13 @@ class Vehicule:
 
         Args:
             vitesse (int): La vitesse initiale du véhicule.
+            
             rect (Rect): Un rectangle définissant les dimensions totales du
             véhicules
+            
             voie (Voie, optional): La voie sur la piste sur laquelle le véhicule
             est localisée. Défaut à None.
+            
             vehicule_joueur (bool, optional): True si le véhicule est celui du
             joueur. Défaut à False.
         """
@@ -144,6 +147,7 @@ class Vehicule:
 
         Args:
             vitesse_pilote (int): La vitesse du véhicule du pilote.
+            
             voie (Voie, optional): La voie dans laquelle le véhicule doit se
             trouver. Si la voie courante est différente, il y aura changement
             de voie. Défaut à None.
@@ -165,7 +169,6 @@ class Vehicule:
 
         self.rect = self.rect.move(vitesse_x, vitesse_y)
 
-    # Noter dans le rapport la façon d'annoter une classe dans elle même.
     def ajuste_vitesse(self, autre_vehicule: "Vehicule"):
         """Ajuste la vitesse du véhicule en fonction d'un autre véhicule
         donnée.

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Ce programme implémente un jeu de course de voiture très simple afin de
-    s'exercer à la programmation python.
+s'exercer à la programmation python.
 """
 
 import pygame
@@ -17,14 +17,13 @@ HAUTEUR_FENETRE = 800
 VITESSE_MAX = 20
 LONGUEUR_VEHICULE = 200
 LARGEUR_VEHICULE = 100
-PERIODE_CREATION_COMPETITEUR = 2
+PERIODE_CREATION_COMPETITEURS = 2
 
 
 class NoValueReturned(Exception):
     """Exception utilisée lorsqu'une fonction n'est pas en mesure de retourner
     une valeur attendue.
     """
-
     pass
 
 
@@ -43,7 +42,6 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Vehicule:
     Returns:
         Vehicule: Le véhicule créé.
     """
-
     no_voie = random.randrange(0, piste.get_nb_voies())
     vitesse_vehicule: int = random.randrange(7, VITESSE_MAX)
     vitesse_apparante: int = vitesse_vehicule - vitesse
@@ -65,67 +63,57 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Vehicule:
 
 def main():
     """Fonction principale du programme."""
-
-    competiteurs: list[Vehicule] = []
-
     random.seed()
-
     pygame.init()
     pygame.font.init()
 
     fenetre: Surface = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
     pygame.display.set_caption("Grand prix formule 1 x 10^6")
 
+    competiteurs: list[Vehicule] = []
     piste = Piste(LARGEUR_FENETRE, HAUTEUR_FENETRE)
-
     horloge = pygame.time.Clock()
-
     vitesse: int = 0
     voie_joueur = 1
-
-    # TODO récupérer la voie autrement que par l'Accès direct: piste.voies[voie_pilote]
-
     mon_vehicule = Vehicule(
         0,
         Rect((0.2 * LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
         piste.get_voie(voie_joueur),
         vehicule_joueur=True,
     )
-
     compteur: int = (
         int(time.perf_counter())
-        + 5  # Donne 5 secondes de délai avant l'arrivé des premiers véhicules
+        + 5  # Donne 5 secondes de délai avant l'arrivé des premiers compétiteurs
     )
     game_over: bool = False
     fin = False
+    
     while not fin:
         event = pygame.event.poll()
         if event.type == pygame.QUIT:
             fin = True
+        
         elif event.type == pygame.KEYDOWN:
+            
             if event.key == pygame.K_LEFT:
                 vitesse = vitesse - 1
                 vitesse = max(0, vitesse)
+            
             if event.key == pygame.K_RIGHT:
                 vitesse = vitesse + 1
                 vitesse = min(vitesse, VITESSE_MAX)
+            
             if event.key == pygame.K_UP:
-
-                # TODO Doit gèrer l'Accès aux voies par la piste
                 voie_joueur = max(voie_joueur - 1, 0)
-
+            
             if event.key == pygame.K_DOWN:
-
-                # TODO Doit gèrer le nombre max de voie différemment, idem pour l'Accès aux voies
                 voie_joueur = min(voie_joueur + 1, piste.get_nb_voies() - 1)
         else:
 
             if not game_over:
 
                 fenetre.fill(Color("black"))
-
                 piste.dessine(fenetre, vitesse)
-
                 mon_vehicule.bouge(vitesse, piste.get_voie(voie_joueur))
                 mon_vehicule.dessine(fenetre)
 
@@ -142,7 +130,7 @@ def main():
                     c2.ajuste_vitesse(c1)
 
                 if time.perf_counter() > compteur:
-                    compteur = time.perf_counter() + PERIODE_CREATION_COMPETITEUR
+                    compteur = time.perf_counter() + PERIODE_CREATION_COMPETITEURS
                     try:
                         vehicule = creer_competiteur(piste, vitesse)
                         if not vehicule.est_chevauche_liste(competiteurs):
