@@ -27,7 +27,7 @@ class NoValueReturned(Exception):
     pass
 
 
-def creer_competiteur(piste: Piste, vitesse: int) -> Vehicule:
+def creer_competiteur(piste: Piste, vitesse: int) -> Competiteur:
     """Cette fonction crée et retourne un véhicule dans une voie choisie au
        hasard sur la piste donnée.
 
@@ -46,13 +46,13 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Vehicule:
     vitesse_vehicule: int = random.randrange(7, VITESSE_MAX)
     vitesse_apparante: int = vitesse_vehicule - vitesse
     if vitesse_apparante > 0:
-        return Vehicule(
+        return Competiteur(
             vitesse_vehicule,
             Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
             piste.get_voie(no_voie),
         )
     elif vitesse_apparante < 0:
-        return Vehicule(
+        return Competiteur(
             vitesse_vehicule,
             Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
             piste.get_voie(no_voie),
@@ -63,6 +63,7 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Vehicule:
 
 def main():
     """Fonction principale du programme."""
+    
     random.seed()
     pygame.init()
     pygame.font.init()
@@ -70,16 +71,15 @@ def main():
     fenetre: Surface = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
     pygame.display.set_caption("Grand prix formule 1 x 10^6")
 
-    competiteurs: list[Vehicule] = []
+    competiteurs: list[Competiteur] = []
     piste = Piste(LARGEUR_FENETRE, HAUTEUR_FENETRE)
     horloge = pygame.time.Clock()
     vitesse: int = 0
     voie_joueur = 1
-    mon_vehicule = Vehicule(
+    joueur = Joueur(
         0,
         Rect((0.2 * LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
-        piste.get_voie(voie_joueur),
-        vehicule_joueur=True,
+        piste.get_voie(voie_joueur)
     )
     compteur: int = (
         int(time.perf_counter())
@@ -114,8 +114,8 @@ def main():
 
                 fenetre.fill(Color("black"))
                 piste.dessine(fenetre, vitesse)
-                mon_vehicule.bouge(vitesse, piste.get_voie(voie_joueur))
-                mon_vehicule.dessine(fenetre)
+                joueur.bouge(vitesse, piste.get_voie(voie_joueur))
+                joueur.dessine(fenetre)
 
                 # Nettoie les compétiteurs en ne gardant que ceux qui sont visibles.
                 competiteurs = list(
@@ -132,9 +132,9 @@ def main():
                 if time.perf_counter() > compteur:
                     compteur = time.perf_counter() + PERIODE_CREATION_COMPETITEURS
                     try:
-                        vehicule = creer_competiteur(piste, vitesse)
-                        if not vehicule.est_chevauche_liste(competiteurs):
-                            competiteurs.append(vehicule)
+                        competiteur = creer_competiteur(piste, vitesse)
+                        if not competiteur.est_chevauche_liste(competiteurs):
+                            competiteurs.append(competiteur)
                     except NoValueReturned:
                         pass
 
@@ -142,7 +142,7 @@ def main():
                     competiteur.bouge(vitesse)
                     competiteur.dessine(fenetre)
 
-                if mon_vehicule.est_chevauche_liste(competiteurs):
+                if joueur.est_chevauche_liste(competiteurs):
                     game_over = True
 
             else:
