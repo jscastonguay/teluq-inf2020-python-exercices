@@ -11,30 +11,28 @@ from piste import *
 
 
 class Vehicule(ABC):
-    """Classe définissant un véhicule sur la piste, le véhicule du joueur aussi
-    bien que celui des compétiteurs.
+    """Classe abstraite définissant un véhicule sur la piste.
     """
 
     def __init__(
-        self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
+        self, vitesse: int, rect: Rect, voie: Voie) -> None:
         """Constructeur de Vehicule.
 
         Args:
             vitesse (int): La vitesse initiale du véhicule.
             
             rect (Rect): Un rectangle définissant les dimensions totales du
-            véhicules
+            véhicules. La position initiale en x est définie par rect mais la
+            position initiale en y est définie par la voie.
             
-            voie (Voie, optional): La voie sur la piste sur laquelle le véhicule
-            est localisée. Défaut à None.
+            voie (Voie): La voie sur la piste sur laquelle le véhicule est
+            localisée. La position initiale en y est définie par la voie.
         """
-
         self.vitesse: int = vitesse
         self.rect: Rect = rect
         self.voie: Voie = voie
-
-        if voie:
-            self.rect.centery = voie.rect.centery
+        
+        self.rect.centery = voie.rect.centery
 
         self.couleur_corp = self._get_courleur_aleatoire()
         self.couleur_habitacle = self._get_courleur_aleatoire()
@@ -134,20 +132,12 @@ class Vehicule(ABC):
     def bouge(self, vitesse_joueur: int, voie: Voie = None):
         """Déplace le véhicule dans la voie donnée.
         
-        Si le véhicule est celui du pilote, le véhicule ne se déplace pas en X:
-        le véhicule ne se déplace pas selon la perspective du joueur. Sinon, le
-        véhicule se déplace en X selon la vitesse apparente entre sa vitesse et
-        celle du véhicule du joueur.        
-        
-        S'il y a changement de voie, le véhicule se déplace en Y à la même
-        vitesse qu'en X (ou supposée vitesse en X pour le véhicule du joueur).
-
         Args:
             vitesse_joueur (int): La vitesse du véhicule du joueur.
             
             voie (Voie, optional): La voie dans laquelle le véhicule doit se
             trouver. Si la voie courante est différente, il y aura changement
-            de voie. Défaut à None.
+            de voie. Défaut est None.
         """
 
     def est_chevauche(self, autre_vehicule: "Vehicule") -> bool:
@@ -169,8 +159,7 @@ class Vehicule(ABC):
         véhicules.
 
         Args:
-            liste_vehicules (list[&quot;Vehicule&quot;]): Liste de véhicule à
-            évaluer.
+            liste_vehicules (list[Vehicule]): Liste de véhicule à évaluer.
 
         Returns:
             bool: True s'il y a une collision en l'instance et l'une des voitures.
@@ -185,27 +174,23 @@ class Vehicule(ABC):
 
 
 class Joueur(Vehicule):
-    """Classe définissant un véhicule sur la piste, le véhicule du joueur aussi
-    bien que celui des compétiteurs.
+    """Classe définissant le véhicule du joueur.
     """
 
     def __init__(
         self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
         super().__init__(vitesse, rect, voie)
 
-    def bouge(self, vitesse_pilote: int, voie: Voie = None):
+    def bouge(self, vitesse_joueur: int, voie: Voie = None):
         """Déplace le véhicule dans la voie donnée.
         
-        Si le véhicule est celui du pilote, le véhicule ne se déplace pas en X:
-        le véhicule ne se déplace pas selon la perspective du joueur. Sinon, le
-        véhicule se déplace en X selon la vitesse apparente entre sa vitesse et
-        celle du véhicule du joueur.        
-        
-        S'il y a changement de voie, le véhicule se déplace en Y à la même
-        vitesse qu'en X (ou supposée vitesse en X pour le véhicule du joueur).
+        Le véhicule ne se déplace pas en x puisque tous les déplacements se
+        font dans la perspective du joueur. Lors d'un changement de voie, le
+        véhicule se déplace en y à la même vitesse qu'il devrait se déplacer
+        en x.
 
         Args:
-            vitesse_pilote (int): La vitesse du véhicule du pilote.
+            vitesse_joueur (int): La vitesse du véhicule du joueur.
             
             voie (Voie, optional): La voie dans laquelle le véhicule doit se
             trouver. Si la voie courante est différente, il y aura changement
@@ -217,61 +202,40 @@ class Joueur(Vehicule):
             self.voie = voie
         if self.voie:
             vitesse_y = self.voie.rect.centery - self.rect.centery
-            vitesse_y = min(vitesse_y, vitesse_pilote)
-            vitesse_y = max(vitesse_y, -vitesse_pilote)
+            vitesse_y = min(vitesse_y, vitesse_joueur)
+            vitesse_y = max(vitesse_y, -vitesse_joueur)
 
         self.rect = self.rect.move(0, vitesse_y)
 
 
 class Competiteur(Vehicule):
-    """Classe définissant un véhicule sur la piste, le véhicule du joueur aussi
-    bien que celui des compétiteurs.
+    """Classe définissant un véhicule compétiteur.
     """
 
     def __init__(
         self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
-        """Constructeur de Vehicule.
-
-        Args:
-            vitesse (int): La vitesse initiale du véhicule.
-            
-            rect (Rect): Un rectangle définissant les dimensions totales du
-            véhicules
-            
-            voie (Voie, optional): La voie sur la piste sur laquelle le véhicule
-            est localisée. Défaut à None.
-            
-            vehicule_joueur (bool, optional): True si le véhicule est celui du
-            joueur. Défaut à False.
-        """
         super().__init__(vitesse, rect, voie)
 
-    def bouge(self, vitesse_pilote: int, voie: Voie = None):
+    def bouge(self, vitesse_joueur: int, voie: Voie = None):
         """Déplace le véhicule dans la voie donnée.
         
-        Si le véhicule est celui du pilote, le véhicule ne se déplace pas en X:
-        le véhicule ne se déplace pas selon la perspective du joueur. Sinon, le
-        véhicule se déplace en X selon la vitesse apparente entre sa vitesse et
-        celle du véhicule du joueur.        
+        Le véhicule compétiteur se déplace en x selon la vitesse apparente
+        entre sa vitesse et celle du véhicule du joueur.        
         
-        S'il y a changement de voie, le véhicule se déplace en Y à la même
-        vitesse qu'en X (ou supposée vitesse en X pour le véhicule du joueur).
-
         Args:
-            vitesse_pilote (int): La vitesse du véhicule du pilote.
+            vitesse_joueur (int): La vitesse du véhicule du joueur.
             
-            voie (Voie, optional): La voie dans laquelle le véhicule doit se
-            trouver. Si la voie courante est différente, il y aura changement
-            de voie. Défaut à None.
+            voie (Voie, optional): La voie dans laquelle le véhicule doit
+            se trouver. N'a aucun effet. Défaut est None.
         """
-        vitesse_x = self.vitesse - vitesse_pilote
+        vitesse_x = self.vitesse - vitesse_joueur
         self.rect = self.rect.move(vitesse_x, 0)
 
     def ajuste_vitesse(self, autre_vehicule: "Vehicule"):
         """Ajuste la vitesse du véhicule en fonction d'un autre véhicule
         donnée.
         
-        Si le véhicule donné se rapproche par l'avant dans la une même voie et
+        Si le véhicule donné se rapproche par l'avant dans une même voie et
         qu'il est à courte distance, la vitesse de l'instance de véhicule
         ralentit.
 

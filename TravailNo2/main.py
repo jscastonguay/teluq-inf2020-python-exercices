@@ -43,17 +43,17 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Competiteur:
         Vehicule: Le véhicule créé.
     """
     no_voie = random.randrange(0, piste.get_nb_voies())
-    vitesse_vehicule: int = random.randrange(7, VITESSE_MAX)
-    vitesse_apparante: int = vitesse_vehicule - vitesse
+    vitesse_competiteur: int = random.randrange(7, VITESSE_MAX)
+    vitesse_apparante: int = vitesse_competiteur - vitesse
     if vitesse_apparante > 0:
         return Competiteur(
-            vitesse_vehicule,
+            vitesse_competiteur,
             Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
             piste.get_voie(no_voie),
         )
     elif vitesse_apparante < 0:
         return Competiteur(
-            vitesse_vehicule,
+            vitesse_competiteur,
             Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
             piste.get_voie(no_voie),
         )
