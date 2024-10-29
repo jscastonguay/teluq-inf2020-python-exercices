@@ -129,7 +129,7 @@ class Vehicule(ABC):
         draw.rect(fenetre, Color("black"), ((left, top), (width, height)))
 
     @abstractmethod
-    def bouge(self, vitesse_joueur: int, voie: Voie = None):
+    def bouge(self, vitesse_joueur: int, voie: Voie = None) -> None:
         """Déplace le véhicule dans la voie donnée.
         
         Args:
@@ -181,7 +181,7 @@ class Joueur(Vehicule):
         self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
         super().__init__(vitesse, rect, voie)
 
-    def bouge(self, vitesse_joueur: int, voie: Voie = None):
+    def bouge(self, vitesse_joueur: int, voie: Voie = None) -> None:
         """Déplace le véhicule dans la voie donnée.
         
         Le véhicule ne se déplace pas en x puisque tous les déplacements se
@@ -216,7 +216,7 @@ class Competiteur(Vehicule):
         self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
         super().__init__(vitesse, rect, voie)
 
-    def bouge(self, vitesse_joueur: int, voie: Voie = None):
+    def bouge(self, vitesse_joueur: int, voie: Voie = None) -> None:
         """Déplace le véhicule dans la voie donnée.
         
         Le véhicule compétiteur se déplace en x selon la vitesse apparente

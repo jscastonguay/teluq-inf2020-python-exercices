@@ -35,9 +35,9 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Competiteur:
         piste (Piste): La piste sur laquelle le véhicule sera créer.
         vitesse (int): La vitesse initiale du véhicule créé.
 
-    Raises:
+    Raise:
         NoValueReturned: Lorsqu'aucun véhicule n'a pu être créé (exemple,
-        indisponibilité de la voie où devait être créée le véhicule)
+        indisponibilité de la voie où devait être créée le véhicule).
 
     Returns:
         Vehicule: Le véhicule créé.
@@ -45,19 +45,22 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Competiteur:
     no_voie = random.randrange(0, piste.get_nb_voies())
     vitesse_competiteur: int = random.randrange(7, VITESSE_MAX)
     vitesse_apparante: int = vitesse_competiteur - vitesse
-    if vitesse_apparante > 0:
-        return Competiteur(
-            vitesse_competiteur,
-            Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
-            piste.get_voie(no_voie),
-        )
-    elif vitesse_apparante < 0:
-        return Competiteur(
-            vitesse_competiteur,
-            Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
-            piste.get_voie(no_voie),
-        )
-    else:
+    try:
+        if vitesse_apparante > 0:
+            return Competiteur(
+                vitesse_competiteur,
+                Rect((-LONGUEUR_VEHICULE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
+                piste.get_voie(no_voie),
+            )
+        elif vitesse_apparante < 0:
+            return Competiteur(
+                vitesse_competiteur,
+                Rect((LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
+                piste.get_voie(no_voie),
+            )
+        else:
+            raise NoValueReturned
+    except ValueError:
         raise NoValueReturned
 
 
@@ -76,11 +79,14 @@ def main():
     horloge = pygame.time.Clock()
     vitesse: int = 0
     voie_joueur = 1
-    joueur = Joueur(
-        0,
-        Rect((0.2 * LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
-        piste.get_voie(voie_joueur)
-    )
+    try:
+        joueur = Joueur(
+            0,
+            Rect((0.2 * LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
+            piste.get_voie(voie_joueur)
+        )
+    except NoValueReturned as Err:
+        print(f"Erreur lors de la création du véhicule du joueur dans la fonction {main.__name__}: {Err}")
     compteur: int = (
         int(time.perf_counter())
         + 5  # Donne 5 secondes de délai avant l'arrivé des premiers compétiteurs
@@ -114,7 +120,10 @@ def main():
 
                 fenetre.fill(Color("black"))
                 piste.dessine(fenetre, vitesse)
-                joueur.bouge(vitesse, piste.get_voie(voie_joueur))
+                try:
+                    joueur.bouge(vitesse, piste.get_voie(voie_joueur))
+                except NoValueReturned:
+                    print(f"Erreur lors du déplacement du véhicule du joueur dans la fonction {main.__name__}: {Err}")
                 joueur.dessine(fenetre)
 
                 # Nettoie les compétiteurs en ne gardant que ceux qui sont visibles.

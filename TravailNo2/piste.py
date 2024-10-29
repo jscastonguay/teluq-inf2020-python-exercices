@@ -204,7 +204,7 @@ class Piste:
             )
         except TypeError as Err:
             print(
-                f"Erreur durant le tracage d'une ligne dans la fonction {Piste._dessine_bordure.__name__}: {Err}"
+                f"Erreur durant le traçage d'une ligne dans la fonction {Piste._dessine_bordure.__name__}: {Err}"
             )
 
     def get_nb_voies(self) -> int:
@@ -214,16 +214,22 @@ class Piste:
             int: Le nombre de voies total de la piste.
         """
         return NB_DE_VOIES
-
+    
     def get_voie(self, index_voie: int) -> Voie:
         """Retourne une voie donnée.
 
         Args:
-            index_voie (int): L'index de la voie. L'index commence à 0.
+            index_voie (int): L'index de la voie. L'index commence à 0. 
+            
+        Raise:
+            ValueError: Si l'index ne correspond à aucune voie.
 
         Returns:
             Voie: La voie sélectionnée par l'index.
         """
+        if 0 < index_voie >= NB_DE_VOIES:
+            raise ValueError
+        
         index = max(index_voie, 0)
         index = min(index, NB_DE_VOIES - 1)
         return self.voies[index]
