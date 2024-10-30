@@ -160,7 +160,8 @@ class Vehicule(ABC):
             liste_vehicules (list[Vehicule]): Liste de véhicule à évaluer.
 
         Returns:
-            bool: True s'il y a une collision en l'instance et l'une des voitures.
+            bool: True s'il y a une collision entre l'instance et l'une des
+            voitures de la liste.
         """
         try:
             return functools.reduce(
@@ -229,7 +230,7 @@ class Competiteur(Vehicule):
         """Ajuste la vitesse du véhicule en fonction d'un autre véhicule
         donnée.
 
-        Si le véhicule donné se rapproche par l'avant dans une même voie et
+        Si le véhicule donné se rapproche par l'avant dans la même voie et
         qu'il est à courte distance, la vitesse de l'instance de véhicule
         ralentit.
 

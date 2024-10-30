@@ -29,19 +29,19 @@ class NoValueReturned(Exception):
 
 
 def creer_competiteur(piste: Piste, vitesse: int) -> Competiteur:
-    """Cette fonction crée et retourne un véhicule dans une voie choisie au
+    """Cette fonction crée et retourne un compétiteur dans une voie choisie au
        hasard sur la piste donnée.
 
     Args:
-        piste (Piste): La piste sur laquelle le véhicule sera créer.
+        piste (Piste): La piste sur laquelle le compétiteur sera créer.
         vitesse (int): La vitesse initiale du véhicule créé.
 
     Raise:
-        NoValueReturned: Lorsqu'aucun véhicule n'a pu être créé (exemple,
-        indisponibilité de la voie où devait être créée le véhicule).
+        NoValueReturned: Lorsqu'aucun compétiteur n'a pu être créé (exemple,
+        indisponibilité de la voie où devait être créée le compétiteur).
 
     Returns:
-        Vehicule: Le véhicule créé.
+        Vehicule: Le compétiteur créé.
     """
     no_voie = random.randrange(0, piste.get_nb_voies())
     vitesse_competiteur: int = random.randrange(7, VITESSE_MAX)
@@ -73,7 +73,7 @@ def main():
     pygame.font.init()
 
     fenetre: Surface = pygame.display.set_mode((LARGEUR_FENETRE, HAUTEUR_FENETRE))
-    pygame.display.set_caption("Grand prix formule 1 x 10^6")
+    pygame.display.set_caption("Grand prix FORMULE 1 x 10^6")
 
     competiteurs: list[Competiteur] = []
     piste = Piste(LARGEUR_FENETRE, HAUTEUR_FENETRE)

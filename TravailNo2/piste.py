@@ -23,6 +23,7 @@ class Ligne:
             pos_x (int): La position initiale en X de l'extrémité gauche.
 
             pos_y (int): La position initiale en y de l'extrémité gauche.
+            
             longueur_ligne (int): La longueur de la ligne.
         """
         self.point_gauche: list[int, int] = [pos_x, pos_y]
@@ -44,7 +45,7 @@ class Ligne:
             )
         except TypeError as Err:
             print(
-                f"Erreur durant le tracage d'une ligne dans la fonction {Ligne.dessine.__name__}: {Err}"
+                f"Erreur durant le traçage d'une ligne dans la fonction {Ligne.dessine.__name__}: {Err}"
             )
 
     def bouge(self, vitesse: int) -> bool:
@@ -102,11 +103,11 @@ class LignePointillee:
         for ligne in self.lignes:
             ligne.dessine(fenetre)
 
-    def bouge(self, vitesse):
+    def bouge(self, vitesse: int):
         """Bouge la ligne pointillée vers la gauche de façon horizontale.
 
         Args:
-            vitesse (_type_): La vitesse à laquelle la ligne bouge.
+            vitesse (int): La vitesse à laquelle la ligne bouge.
         """
         for ligne in self.lignes:
             a_enlever = ligne.bouge(vitesse)
@@ -115,7 +116,7 @@ class LignePointillee:
 
 
 class Voie:
-    """Classe dessinant une voie ayant une de façon optionnelle une ligne
+    """Classe dessinant une voie ayant de façon optionnelle une ligne
     pointillée sur le rebord du haut et/ou du bas.
     """
 
@@ -130,6 +131,7 @@ class Voie:
 
         Args:
             dimension_piste (Rect): Dimension de la voie.
+            
             index (int): Index de la voie, commence à 0.
 
             lignes_haut (bool, optional): True si une ligne pointillée est
@@ -157,10 +159,11 @@ class Voie:
             )
 
     def dessine(self, fenetre: Surface, vitesse: int) -> None:
-        """_summary_
+        """Dessine la voie sur une surface donnée.
 
         Args:
-            fenetre (Surface): La surface dans laquelle la ligne est dessinée.
+            fenetre (Surface): La surface dans laquelle la voie est dessinée.
+            
             vitesse (int): La vitesse de la voiture du joueur.
         """
         draw.rect(fenetre, Color("gray"), self.rect)
@@ -170,7 +173,7 @@ class Voie:
 
 
 class Piste:
-    """Classe dessinant une piste faire de plusieurs voies."""
+    """Classe dessinant une piste faite de plusieurs voies."""
 
     def __init__(self, largeur: int, hauteur: int) -> None:
         """Constructeur de la piste.
@@ -237,6 +240,7 @@ class Piste:
 
         Args:
             fenetre (Surface): La surface dans laquelle la piste est dessinée.
+            
             vitesse (int): La vitesse du joueur.
         """
         for i in range(NB_DE_VOIES):
