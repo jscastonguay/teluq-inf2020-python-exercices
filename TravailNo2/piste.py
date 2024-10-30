@@ -21,7 +21,7 @@ class Ligne:
 
         Args:
             pos_x (int): La position initiale en X de l'extrémité gauche.
-            
+
             pos_y (int): La position initiale en y de l'extrémité gauche.
             longueur_ligne (int): La longueur de la ligne.
         """
@@ -71,7 +71,7 @@ class LignePointillee:
         Args:
             pos_x_limite (int, optional): La limite à droite de la ligne
             pointillée. Défaut à 0.
-            
+
             pos_y (int, optional): La position de la ligne en y. Défaut à 0.
         """
         self.pos_x_limite = pos_x_limite
@@ -80,8 +80,7 @@ class LignePointillee:
         self._construit()
 
     def _construit(self) -> None:
-        """Construit la ligne pointillée.
-        """
+        """Construit la ligne pointillée."""
         if len(self.lignes) == 0:
             self.lignes.append(Ligne(0, self.pos_y, LONGUEUR_LIGNES))
         while self.lignes[-1].point_droite[0] <= self.pos_x_limite:
@@ -97,7 +96,7 @@ class LignePointillee:
         """Dessine la ligne pointillée.
 
         Args:
-            fenetre (Surface): La surface dans laquelle la ligne est dessinée. 
+            fenetre (Surface): La surface dans laquelle la ligne est dessinée.
         """
         self._construit()
         for ligne in self.lignes:
@@ -132,10 +131,10 @@ class Voie:
         Args:
             dimension_piste (Rect): Dimension de la voie.
             index (int): Index de la voie, commence à 0.
-            
+
             lignes_haut (bool, optional): True si une ligne pointillée est
             présent sur le rebord du haut. Défaut à False.
-            
+
             lignes_bas (bool, optional): Idem mais pour le rebord du bas.
             Défaut à False.
         """
@@ -171,8 +170,7 @@ class Voie:
 
 
 class Piste:
-    """Classe dessinant une piste faire de plusieurs voies.
-    """
+    """Classe dessinant une piste faire de plusieurs voies."""
 
     def __init__(self, largeur: int, hauteur: int) -> None:
         """Constructeur de la piste.
@@ -214,13 +212,13 @@ class Piste:
             int: Le nombre de voies total de la piste.
         """
         return NB_DE_VOIES
-    
+
     def get_voie(self, index_voie: int) -> Voie:
         """Retourne une voie donnée.
 
         Args:
-            index_voie (int): L'index de la voie. L'index commence à 0. 
-            
+            index_voie (int): L'index de la voie. L'index commence à 0.
+
         Raise:
             ValueError: Si l'index ne correspond à aucune voie.
 
@@ -229,7 +227,7 @@ class Piste:
         """
         if 0 < index_voie >= NB_DE_VOIES:
             raise ValueError
-        
+
         index = max(index_voie, 0)
         index = min(index, NB_DE_VOIES - 1)
         return self.voies[index]

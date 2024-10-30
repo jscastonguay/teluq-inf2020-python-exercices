@@ -11,27 +11,25 @@ from piste import *
 
 
 class Vehicule(ABC):
-    """Classe abstraite définissant un véhicule sur la piste.
-    """
+    """Classe abstraite définissant un véhicule sur la piste."""
 
-    def __init__(
-        self, vitesse: int, rect: Rect, voie: Voie) -> None:
+    def __init__(self, vitesse: int, rect: Rect, voie: Voie) -> None:
         """Constructeur de Vehicule.
 
         Args:
             vitesse (int): La vitesse initiale du véhicule.
-            
+
             rect (Rect): Un rectangle définissant les dimensions totales du
             véhicules. La position initiale en x est définie par rect mais la
             position initiale en y est définie par la voie.
-            
+
             voie (Voie): La voie sur la piste sur laquelle le véhicule est
             localisée. La position initiale en y est définie par la voie.
         """
         self.vitesse: int = vitesse
         self.rect: Rect = rect
         self.voie: Voie = voie
-        
+
         self.rect.centery = voie.rect.centery
 
         self.couleur_corp = self._get_courleur_aleatoire()
@@ -131,10 +129,10 @@ class Vehicule(ABC):
     @abstractmethod
     def bouge(self, vitesse_joueur: int, voie: Voie = None) -> None:
         """Déplace le véhicule dans la voie donnée.
-        
+
         Args:
             vitesse_joueur (int): La vitesse du véhicule du joueur.
-            
+
             voie (Voie, optional): La voie dans laquelle le véhicule doit se
             trouver. Si la voie courante est différente, il y aura changement
             de voie. Défaut est None.
@@ -174,16 +172,14 @@ class Vehicule(ABC):
 
 
 class Joueur(Vehicule):
-    """Classe définissant le véhicule du joueur.
-    """
+    """Classe définissant le véhicule du joueur."""
 
-    def __init__(
-        self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
+    def __init__(self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
         super().__init__(vitesse, rect, voie)
 
     def bouge(self, vitesse_joueur: int, voie: Voie = None) -> None:
         """Déplace le véhicule dans la voie donnée.
-        
+
         Le véhicule ne se déplace pas en x puisque tous les déplacements se
         font dans la perspective du joueur. Lors d'un changement de voie, le
         véhicule se déplace en y à la même vitesse qu'il devrait se déplacer
@@ -191,7 +187,7 @@ class Joueur(Vehicule):
 
         Args:
             vitesse_joueur (int): La vitesse du véhicule du joueur.
-            
+
             voie (Voie, optional): La voie dans laquelle le véhicule doit se
             trouver. Si la voie courante est différente, il y aura changement
             de voie. Défaut à None.
@@ -209,22 +205,20 @@ class Joueur(Vehicule):
 
 
 class Competiteur(Vehicule):
-    """Classe définissant un véhicule compétiteur.
-    """
+    """Classe définissant un véhicule compétiteur."""
 
-    def __init__(
-        self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
+    def __init__(self, vitesse: int, rect: Rect, voie: Voie = None) -> None:
         super().__init__(vitesse, rect, voie)
 
     def bouge(self, vitesse_joueur: int, voie: Voie = None) -> None:
         """Déplace le véhicule dans la voie donnée.
-        
+
         Le véhicule compétiteur se déplace en x selon la vitesse apparente
-        entre sa vitesse et celle du véhicule du joueur.        
-        
+        entre sa vitesse et celle du véhicule du joueur.
+
         Args:
             vitesse_joueur (int): La vitesse du véhicule du joueur.
-            
+
             voie (Voie, optional): La voie dans laquelle le véhicule doit
             se trouver. N'a aucun effet. Défaut est None.
         """
@@ -234,7 +228,7 @@ class Competiteur(Vehicule):
     def ajuste_vitesse(self, autre_vehicule: "Vehicule"):
         """Ajuste la vitesse du véhicule en fonction d'un autre véhicule
         donnée.
-        
+
         Si le véhicule donné se rapproche par l'avant dans une même voie et
         qu'il est à courte distance, la vitesse de l'instance de véhicule
         ralentit.

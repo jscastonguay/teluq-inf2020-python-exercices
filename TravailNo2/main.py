@@ -24,6 +24,7 @@ class NoValueReturned(Exception):
     """Exception utilisée lorsqu'une fonction n'est pas en mesure de retourner
     une valeur attendue.
     """
+
     pass
 
 
@@ -66,7 +67,7 @@ def creer_competiteur(piste: Piste, vitesse: int) -> Competiteur:
 
 def main():
     """Fonction principale du programme."""
-    
+
     random.seed()
     pygame.init()
     pygame.font.init()
@@ -83,35 +84,37 @@ def main():
         joueur = Joueur(
             0,
             Rect((0.2 * LARGEUR_FENETRE, 0), (LONGUEUR_VEHICULE, LARGEUR_VEHICULE)),
-            piste.get_voie(voie_joueur)
+            piste.get_voie(voie_joueur),
         )
     except NoValueReturned as Err:
-        print(f"Erreur lors de la création du véhicule du joueur dans la fonction {main.__name__}: {Err}")
+        print(
+            f"Erreur lors de la création du véhicule du joueur dans la fonction {main.__name__}: {Err}"
+        )
     compteur: int = (
         int(time.perf_counter())
         + 5  # Donne 5 secondes de délai avant l'arrivé des premiers compétiteurs
     )
     game_over: bool = False
     fin = False
-    
+
     while not fin:
         event = pygame.event.poll()
         if event.type == pygame.QUIT:
             fin = True
-        
+
         elif event.type == pygame.KEYDOWN:
-            
+
             if event.key == pygame.K_LEFT:
                 vitesse = vitesse - 1
                 vitesse = max(0, vitesse)
-            
+
             if event.key == pygame.K_RIGHT:
                 vitesse = vitesse + 1
                 vitesse = min(vitesse, VITESSE_MAX)
-            
+
             if event.key == pygame.K_UP:
                 voie_joueur = max(voie_joueur - 1, 0)
-            
+
             if event.key == pygame.K_DOWN:
                 voie_joueur = min(voie_joueur + 1, piste.get_nb_voies() - 1)
         else:
@@ -123,7 +126,9 @@ def main():
                 try:
                     joueur.bouge(vitesse, piste.get_voie(voie_joueur))
                 except NoValueReturned:
-                    print(f"Erreur lors du déplacement du véhicule du joueur dans la fonction {main.__name__}: {Err}")
+                    print(
+                        f"Erreur lors du déplacement du véhicule du joueur dans la fonction {main.__name__}: {Err}"
+                    )
                 joueur.dessine(fenetre)
 
                 # Nettoie les compétiteurs en ne gardant que ceux qui sont visibles.
