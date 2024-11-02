@@ -23,7 +23,7 @@ class Ligne:
             pos_x (int): La position initiale en X de l'extrémité gauche.
 
             pos_y (int): La position initiale en y de l'extrémité gauche.
-            
+
             longueur_ligne (int): La longueur de la ligne.
         """
         self.point_gauche: list[int, int] = [pos_x, pos_y]
@@ -131,7 +131,7 @@ class Voie:
 
         Args:
             dimension_piste (Rect): Dimension de la voie.
-            
+
             index (int): Index de la voie, commence à 0.
 
             lignes_haut (bool, optional): True si une ligne pointillée est
@@ -163,7 +163,7 @@ class Voie:
 
         Args:
             fenetre (Surface): La surface dans laquelle la voie est dessinée.
-            
+
             vitesse (int): La vitesse de la voiture du joueur.
         """
         draw.rect(fenetre, Color("gray"), self.rect)
@@ -240,7 +240,7 @@ class Piste:
 
         Args:
             fenetre (Surface): La surface dans laquelle la piste est dessinée.
-            
+
             vitesse (int): La vitesse du joueur.
         """
         for i in range(NB_DE_VOIES):
