@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Exemple JSC</title>
+    <!-- C'est la façon de référer au ficher CSS sous Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <h1>Premier test, par JSC</h1>
+    <p>Voici la liste des étudiants:</p>
+    <ul>
+        {% for etudiant in liste_etudiants %}
+        <li>{{etudiant}}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
