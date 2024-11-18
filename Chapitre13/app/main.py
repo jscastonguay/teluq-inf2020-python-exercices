@@ -21,6 +21,13 @@ def ajoute():
 #     liste_etudiants.append(nom)
 #     return redirect("/")
 
+
+@app.route("/ajoute_autre/<nom>")
+def ajoute_autre(nom):
+    liste_etudiants.append(nom)
+    return redirect("/")
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
     
