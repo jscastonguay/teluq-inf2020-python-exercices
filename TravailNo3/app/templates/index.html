@@ -9,6 +9,7 @@
 </style>
 {% endblock %}
 {% block content %}
+<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; " class="button">Nouveau TODO</button>
 <h1>La liste de TODO</h1>
 <table>
   <tr>
