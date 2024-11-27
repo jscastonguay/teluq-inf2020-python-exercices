@@ -62,7 +62,7 @@ class ListeTodo:
         with open(f"{self._repertoire}/{todo["uuid"]}.json", "w") as f:
             f.write(json.dumps(todo))
     
-    def get(self, uuid: str = ""):
+    def get(self, uuid: str = "") -> list[dict]:
         if uuid:
             todo = list(filter(lambda element: element["uuid"] == uuid, ListeTodo._liste))
             if todo == None:
@@ -72,6 +72,13 @@ class ListeTodo:
             return todo
         else:
             return ListeTodo._liste
+        
+    def enleve(self, uuid: str) -> None:
+        todo = self.get(uuid)
+        self._liste.remove(todo[0])
+        
+        # TODO géré les exceptions: si un fichier n'existe pas
+        os.remove(f"{self._repertoire}/{uuid}.json")
 
 
 
@@ -83,4 +90,6 @@ if __name__ == "__main__":
     #liste._recupereListe()
     #print(liste._liste)
     print(liste.get("3f5d27ae-aa78-11ef-b89c-98541b76ef66"))
+    print("===================================================================")
     print(liste.get())
+    liste.enleve("3f5d27ae-aa78-11ef-b89c-98541b76ef66")

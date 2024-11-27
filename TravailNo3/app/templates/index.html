@@ -9,21 +9,31 @@
 </style>
 {% endblock %}
 {% block content %}
-<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; " class="button">Nouveau TODO</button>
+<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; " class="button">Nouveau
+  TODO</button>
 <h1>La liste de TODO</h1>
-<table>
-  <tr>
-    <th>Titre</th>
-    <th>Description</th>
-    <th>tags</th>
-  </tr>
-  {% for todo in liste %}
-  <tr>
-    <td>{{ todo["titre"] }}</td>
-    <td>{{ todo["description"] }}</td>
-    <td>{{ todo["tags"] }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<form method="POST" action="/submit">
+  <div class="form-buttons">
+    <!-- Boutons pour effectuer une opération -->
+    <!-- <button type="submit" name="action" value="view">Voir la ligne sélectionnée</button> -->
+    <button type="submit" name="action" value="efface">Efface</button>
+  </div>
+  <table>
+    <tr>
+      <th>Sélection</th>
+      <th>Titre</th>
+      <th>Description</th>
+      <th>tags</th>
+    </tr>
+    {% for todo in liste %}
+    <tr>
+      <td><input type="radio" name="uuid_selectionnee" value="{{ todo['uuid'] }}" required></td>
+      <td>{{ todo["titre"] }}</td>
+      <td>{{ todo["description"] }}</td>
+      <td>{{ todo["tags"] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</form>
 
 {% endblock %}
