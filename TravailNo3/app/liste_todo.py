@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 import uuid
 from enum import Enum
 import json
@@ -29,7 +29,7 @@ class ListeTodo:
     def nouveau(self, titre: str = "", description:str = "a", tags: list[str] = ["b"]) -> None:
         todo = dict()
         todo["uuid"] = str(uuid.uuid1())
-        todo["date_creation"] = str(date.today())
+        todo["date_creation"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         todo["etat"] = Etat.OUVERT.name
             
         todo["titre"] = titre

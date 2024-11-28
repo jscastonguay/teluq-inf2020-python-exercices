@@ -16,7 +16,7 @@ def ajoute():
     else:
         titre = request.form['titre']
         description = request.form['description']
-        tags = request.form['tags']
+        tags = request.form['tags'].split(',')
         liste.nouveau(titre, description, tags)
         return redirect("/")
     
