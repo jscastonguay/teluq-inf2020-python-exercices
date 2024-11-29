@@ -85,6 +85,10 @@ class ListeTodo:
         #TODO géré les exceptions
         index = next((i for i, a_modifier in enumerate(ListeTodo._liste) if a_modifier["uuid"] == todo["uuid"]), None)
         ListeTodo._liste[index] = todo
+        self._sauvegarde(todo)
+        
+    def get_nb(self):
+        return len(ListeTodo._liste)
 
 
 

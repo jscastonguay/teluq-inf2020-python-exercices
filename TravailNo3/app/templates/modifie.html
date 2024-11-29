@@ -17,6 +17,12 @@
   <input type="text" id="description" name="description" value='{{ todo["description"]}}'><br>
   <label for="tags">Tags (séparés par des virgules):</label>
   <input type="text" id="tags" name="tags" value='{{ todo["tags"]}}'><br>
+  <label for="État">État:</label>
+  <select name="etat" id="etat">
+    <option value="ouvert">Ouvert</option>
+    <option value="en_cours">En cours</option>
+    <option value="fermer">Fermer</option>
+  </select><br>
   <input type="submit" value="Modifie">
   <button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; " class="button">Cancel</button>
 </form>

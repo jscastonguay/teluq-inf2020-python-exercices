@@ -36,8 +36,8 @@ def submit():
 
 
 @app.route('/modifie', methods=['GET', 'POST'])
-def modifie():
-    uuid = request.form.get('uuid')
+def modifie():        
+    uuid = request.args.get('uuid')
     todo = liste.get(uuid)[0]
     if request.method == "GET":
         return render_template("modifie.html", todo = todo)
@@ -45,6 +45,15 @@ def modifie():
         todo["titre"] = request.form["titre"]
         todo["description"] = request.form["description"]
         todo["tags"] = request.form["tags"]
+        match request.form["etat"]:
+            case "ouvert":
+                todo["etat"] = Etat.OUVERT.value
+            case "en_cours":
+                todo["etat"] = Etat.EN_COURS.value
+            case "fermer":
+                todo["etat"] = Etat.FERMEE.value
+            case _:
+                pass
         liste.modifie(todo)
         return redirect("/")
     
