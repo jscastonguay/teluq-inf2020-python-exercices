@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 from liste_todo import *
 
 app = Flask(__name__)
@@ -19,35 +19,36 @@ def ajoute():
         tags = request.form['tags'].split(',')
         liste.nouveau(titre, description, tags)
         return redirect("/")
-    
-
-
-#Pour voir les modifications en cours, voir le chatgtp suivant:
-#https://chatgpt.com/share/67452bd7-3bf8-8007-9f4c-4cf0de9837f9
-
-
-'''
-@app.route("/efface",  methods = ['GET', 'POST'])
-def efface():
-    #titre = request.form['titre']
-    #description = request.form['description']
-    #tags = request.form['tags']
-    selection = request.form['ligne_setectionnee']
-    # liste.nouveau(titre, description, tags)
-    print(f"efface:{selection}")
-    return redirect("/")
-'''
+   
+   
 @app.route('/submit', methods=['POST'])
 def submit():
     uuid = request.form['uuid_selectionnee']
     action = request.form['action']
     if action == "efface":
-        
-        # TODO Effacer !!!
         liste.enleve(uuid)
-        
-        pass
+        return redirect("/")
+    if action == "modifie":
+        return redirect(url_for("modifie", uuid = uuid))
+    
+    # TODO gère une erreur
     return redirect("/")
+
+
+@app.route('/modifie', methods=['GET', 'POST'])
+def modifie():
+    uuid = request.form.get('uuid')
+    todo = liste.get(uuid)[0]
+    if request.method == "GET":
+        return render_template("modifie.html", todo = todo)
+    elif request.method == "POST":
+        todo["titre"] = request.form["titre"]
+        todo["description"] = request.form["description"]
+        todo["tags"] = request.form["tags"]
+        liste.modifie(todo)
+        return redirect("/")
+    
+    # TODO Exception: géré le cas d'une méthode qui n'est pas la bonne
     
 if __name__ == "__main__":
     app.run(debug=True)

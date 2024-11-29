@@ -79,6 +79,12 @@ class ListeTodo:
         
         # TODO géré les exceptions: si un fichier n'existe pas
         os.remove(f"{self._repertoire}/{uuid}.json")
+        
+    def modifie(self, todo: dict):
+        
+        #TODO géré les exceptions
+        index = next((i for i, a_modifier in enumerate(ListeTodo._liste) if a_modifier["uuid"] == todo["uuid"]), None)
+        ListeTodo._liste[index] = todo
 
 
 
