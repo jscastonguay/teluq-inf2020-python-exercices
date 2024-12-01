@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, url_for
 from liste_todo import *
+import sys
 
 app = Flask(__name__)
 liste = ListeTodo("todo")
@@ -45,15 +46,16 @@ def modifie():
         todo["titre"] = request.form["titre"]
         todo["description"] = request.form["description"]
         todo["tags"] = request.form["tags"]
-        match request.form["etat"]:
-            case "ouvert":
-                todo["etat"] = Etat.OUVERT.value
-            case "en_cours":
-                todo["etat"] = Etat.EN_COURS.value
-            case "fermer":
-                todo["etat"] = Etat.FERMEE.value
-            case _:
-                pass
+        todo["etat"] = request.form["etat"]
+        # match request.form["etat"]:
+        #     case "ouvert":
+        #         todo["etat"] = Etat.OUVERT.name
+        #     case "en_cours":
+        #         todo["etat"] = Etat.EN_COURS.name
+        #     case "fermer":
+        #         todo["etat"] = Etat.FERMEE.name
+        #     case _:
+        #         pass
         liste.modifie(todo)
         return redirect("/")
     

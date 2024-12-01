@@ -9,8 +9,8 @@
 </style>
 {% endblock %}
 {% block content %}
-<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; " class="button">Nouveau TODO</button>
 <h1>La liste de TODO</h1>
+<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; " class="button">Nouveau</button>
 <form method="POST" action="/submit">
   <div class="form-buttons">
     <button type="submit" name="action" value="efface">Efface</button>
@@ -20,6 +20,7 @@
     <tr>
       <th>Sélection</th>
       <th>Date creation</th>
+      <th>État</th>
       <th>Titre</th>
       <th>Description</th>
       <th>tags</th>
@@ -28,6 +29,13 @@
     <tr>
       <td><input type="radio" name="uuid_selectionnee" value="{{ todo['uuid'] }}" required></td>
       <td>{{ todo["date_creation"] }}</td>
+      {% if todo["etat"] == "OUVERT" %}
+      <td>Ouvert</td>
+      {% elif todo["etat"] == "EN_COURS" %}
+      <td>En cours</td>
+      {% elif todo["etat"] == "FERMEE" %}
+      <td>Fermé</td>
+      {% endif %}
       <td>{{ todo["titre"] }}</td>
       <td>{{ todo["description"] }}</td>
       <td>{{ todo["tags"] }}</td>
