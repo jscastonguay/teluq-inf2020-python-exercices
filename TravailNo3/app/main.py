@@ -24,13 +24,14 @@ def ajoute():
    
 @app.route('/submit', methods=['POST'])
 def submit():
-    uuid = request.form['uuid_selectionnee']
-    action = request.form['action']
-    if action == "efface":
-        liste.enleve(uuid)
-        return redirect("/")
-    if action == "modifie":
-        return redirect(url_for("modifie", uuid = uuid))
+    if 'uuid_selectionnee' in request.form:
+        uuid = request.form['uuid_selectionnee']
+        action = request.form['action']
+        if action == "efface":
+            liste.enleve(uuid)
+            return redirect("/")
+        if action == "modifie":
+            return redirect(url_for("modifie", uuid = uuid))
     
     # TODO gère une erreur
     return redirect("/")
@@ -47,15 +48,6 @@ def modifie():
         todo["description"] = request.form["description"]
         todo["tags"] = request.form["tags"]
         todo["etat"] = request.form["etat"]
-        # match request.form["etat"]:
-        #     case "ouvert":
-        #         todo["etat"] = Etat.OUVERT.name
-        #     case "en_cours":
-        #         todo["etat"] = Etat.EN_COURS.name
-        #     case "fermer":
-        #         todo["etat"] = Etat.FERMEE.name
-        #     case _:
-        #         pass
         liste.modifie(todo)
         return redirect("/")
     
