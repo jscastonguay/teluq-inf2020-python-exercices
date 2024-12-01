@@ -2,12 +2,20 @@ from flask import Flask, render_template, redirect, request, url_for
 from liste_todo import *
 import sys
 
+
 app = Flask(__name__)
 liste = ListeTodo("todo")
+conditions_filtre = ConditionsFiltre()
 
 @app.route("/")
 def index():
-    return render_template("index.html", liste = liste.get())
+    
+    print(f"conditions_filtre.etats: {conditions_filtre.etats}, conditions_filtre.tags: {conditions_filtre.tags}")
+    
+    listeComplete = liste.get(filtre=conditions_filtre)
+    #if conditions_filtre.etats != []:
+        
+    return render_template("index.html", liste = listeComplete, filtre = conditions_filtre)
 
 
 @app.route("/ajoute",  methods = ['GET', 'POST'])
@@ -18,6 +26,7 @@ def ajoute():
         titre = request.form['titre']
         description = request.form['description']
         tags = request.form['tags'].split(',')
+        tags = [tag.strip() for tag in tags]
         liste.nouveau(titre, description, tags)
         return redirect("/")
    
@@ -47,11 +56,25 @@ def modifie():
         todo["titre"] = request.form["titre"]
         todo["description"] = request.form["description"]
         todo["tags"] = request.form["tags"].split(',')
+        todo["tags"] = [tag.strip() for tag in todo["tags"]]
         todo["etat"] = request.form["etat"]
         liste.modifie(todo)
         return redirect("/")
     
     # TODO Exception: géré le cas d'une méthode qui n'est pas la bonne
+    
+    
+@app.route('/filtre', methods=['POST'])
+def filtre():
+    action = request.form['action']
+    if action == 'reset':
+        conditions_filtre.reset()
+    if action == 'applique':
+        conditions_filtre.etats = request.form.getlist('filtre-etat')
+        conditions_filtre.tags = request.form["filtre-tags"].split(',')
+        conditions_filtre.tags = [tag.strip() for tag in conditions_filtre.tags]
+    return redirect("/")
+    
     
 if __name__ == "__main__":
     app.run(debug=True)

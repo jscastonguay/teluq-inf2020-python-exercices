@@ -19,25 +19,9 @@
   <input type="text" id="tags" name="tags" value='{{ ", ".join(todo["tags"]) }}'><br>
   <label for="État">État:</label>
   <select name="etat" id="etat" value='{{ todo["etat"]}}'>
-    
-    {% if todo["etat"] == "OUVERT" %}
-    <option value="OUVERT" selected>Ouvert</option>
-    {% else %}
-    <option value="OUVERT">Ouvert</option>
-    {% endif %}
-    
-    {% if todo["etat"] == "EN_COURS" %}
-    <option value="EN_COURS" selected>En cours</option>
-    {% else %}
-    <option value="EN_COURS">En cours</option>
-    {% endif %}
-
-    {% if todo["etat"] == "FERMEE" %}
-    <option value="FERMEE" selected>Fermé</option>
-    {% else %}
-    <option value="FERMEE">Fermé</option>
-    {% endif %}
-
+    <option value="OUVERT" {% if todo["etat"] == "OUVERT" %} selected {% endif %}>Ouvert</option>
+    <option value="EN_COURS" {% if todo["etat"] == "EN_COURS" %} selected {% endif %}>En cours</option>
+    <option value="FERMEE" {% if todo["etat"] == "FERMEE" %} selected {% endif %}>Fermé</option>
   </select><br>
   <input type="submit" value="Modifie">
   <button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "

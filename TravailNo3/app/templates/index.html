@@ -10,7 +10,24 @@
 {% endblock %}
 {% block content %}
 <h1>La liste de TODO</h1>
-<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; " class="button">Nouveau</button>
+<button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('ajoute') }}' ; "class="button">Nouveau</button>
+<hr>
+<p>Filtre</p>
+<form method="POST" action="/filtre" id="filtre">
+  <div class="form-buttons">
+    <button type="submit" name="action" value="applique">Applique</button>
+    <button type="submit" name="action" value="reset">Réinitialise</button>
+  </div>
+  <label for="filtre-etat">États:</label>
+  <select id="filtre-etat" name="filtre-etat" multiple>
+    <option value="OUVERT" {% if "OUVERT" in filtre.etats %} selected {% endif %}>Ouvert</option>
+    <option value="EN_COURS" {% if "EN_COURS" in filtre.etats %} selected {% endif %}>En cours</option>
+    <option value="FERMEE" {% if "FERMEE" in filtre.etats %} selected {% endif %}>Fermé</option>
+  </select>
+  <label for="filtre-tags">Tags:</label>
+  <input type="text" id="filtre-tags" name="filtre-tags">
+</form>
+<hr>
 <form method="POST" action="/submit">
   <div class="form-buttons">
     <button type="submit" name="action" value="efface">Efface</button>
