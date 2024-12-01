@@ -46,7 +46,7 @@ def modifie():
     elif request.method == "POST":
         todo["titre"] = request.form["titre"]
         todo["description"] = request.form["description"]
-        todo["tags"] = request.form["tags"]
+        todo["tags"] = request.form["tags"].split(',')
         todo["etat"] = request.form["etat"]
         liste.modifie(todo)
         return redirect("/")

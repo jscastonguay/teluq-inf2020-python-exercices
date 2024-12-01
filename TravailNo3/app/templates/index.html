@@ -38,7 +38,7 @@
       {% endif %}
       <td>{{ todo["titre"] }}</td>
       <td>{{ todo["description"] }}</td>
-      <td>{{ todo["tags"] }}</td>
+      <td>{{ ", ".join(todo["tags"]) }}</td>
     </tr>
     {% endfor %}
   </table>

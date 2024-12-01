@@ -26,7 +26,7 @@ class ListeTodo:
             ListeTodo._repertoire: str = repertoire
             self._recupereListe()
 
-    def nouveau(self, titre: str = "", description:str = "a", tags: list[str] = ["b"]) -> None:
+    def nouveau(self, titre: str = "", description:str = "", tags: list[str] = []) -> None:
         todo = dict()
         todo["uuid"] = str(uuid.uuid1())
         todo["date_creation"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
