@@ -25,7 +25,7 @@
     <option value="FERMEE" {% if "FERMEE" in filtre.etats %} selected {% endif %}>Fermé</option>
   </select>
   <label for="filtre-tags">Tags:</label>
-  <input type="text" id="filtre-tags" name="filtre-tags">
+  <input type="text" id="filtre-tags" name="filtre-tags" value="{{ ', '.join(filtre.tags) }}">
 </form>
 <hr>
 <form method="POST" action="/submit">

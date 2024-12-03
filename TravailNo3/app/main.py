@@ -9,12 +9,7 @@ conditions_filtre = ConditionsFiltre()
 
 @app.route("/")
 def index():
-    
-    print(f"conditions_filtre.etats: {conditions_filtre.etats}, conditions_filtre.tags: {conditions_filtre.tags}")
-    
-    listeComplete = liste.get(filtre=conditions_filtre)
-    #if conditions_filtre.etats != []:
-        
+    listeComplete = liste.get(filtre=conditions_filtre)        
     return render_template("index.html", liste = listeComplete, filtre = conditions_filtre)
 
 

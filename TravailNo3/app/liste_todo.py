@@ -23,6 +23,22 @@ class ConditionsFiltre:
     def reset(self) -> None:
         self.etats: list[Etat] = [Etat.OUVERT.name, Etat.EN_COURS.name, Etat.FERMEE.name]
         self.tags: list[str] = []
+        
+    def applique(self, element):
+        '''
+        Si les filtres sont vides, les éléments ne sont pas filtrés.
+        '''                
+        etatsTrouves = False
+        if self.etats == [] or element["etat"] in self.etats:
+            etatsTrouves = True
+        tagsTrouves = False
+        if self.tags == [] or self.tags == [""]:
+            tagsTrouves = True
+        else:
+            for tag in element["tags"]:
+                if tag in self.tags:
+                    tagsTrouves = True
+        return etatsTrouves and tagsTrouves
 
         
 class ListeTodo:
@@ -72,7 +88,7 @@ class ListeTodo:
         with open(f"{self._repertoire}/{todo["uuid"]}.json", "w") as f:
             f.write(json.dumps(todo))
     
-    def get(self, uuid: str = "", filtre = None) -> list[dict]:
+    def get(self, uuid: str = "", filtre: ConditionsFiltre = None) -> list[dict]:
         if uuid:
             todo = list(filter(lambda element: element["uuid"] == uuid, ListeTodo._liste))
             if todo == None:
@@ -81,33 +97,8 @@ class ListeTodo:
                 raise ErreurInterne("Plusieurs todo associé à ce uuid")
             return todo
         
-        if filtre:    
-            
-            def applique(element):
-                '''
-                Si les filtres sont vides, les éléments ne sont pas filtrés.
-                '''
-                print("=======")
-                print(f'element["etat"]: {element["etat"]}, element["tags"]: {element["tags"]}')
-                print(f'filtre.etats: {filtre.etats}, filtre.tags: {filtre.tags}')
-                
-                
-                
-                etatsTrouves = False
-                if filtre.etats == [] or element["etat"] in filtre.etats:
-                    etatsTrouves = True
-                tagsTrouves = False
-                if filtre.tags == [] or filtre.tags == [""]:
-                    tagsTrouves = True
-                else:
-                    for tag in element["tags"]:
-                        print(f"tag: {tag}, filtre.tags{filtre.tags}")
-                        if tag in filtre.tags:
-                            tagsTrouves = True
-                print(f'etatsTrouves and tagsTrouves: {etatsTrouves and tagsTrouves}')
-                return etatsTrouves and tagsTrouves
-            
-            return list(filter(applique, ListeTodo._liste))
+        if filtre:            
+            return list(filter(filtre.applique, ListeTodo._liste))
         else:
             return ListeTodo._liste
         
@@ -127,9 +118,6 @@ class ListeTodo:
         
     def get_nb(self):
         return len(ListeTodo._liste)
-
-
-
 
 
 if __name__ == "__main__":
