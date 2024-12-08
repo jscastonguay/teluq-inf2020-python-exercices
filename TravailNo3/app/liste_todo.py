@@ -4,6 +4,8 @@ from enum import Enum
 import json
 import os
 import re
+import asyncio
+import aiofiles
 
 class Etat(Enum):
     OUVERT = 0
@@ -50,7 +52,7 @@ class ListeTodo:
     def __init__(self, repertoire: str) -> None:
         if ListeTodo._liste == []:
             ListeTodo._repertoire: str = repertoire
-            self._recupereListe()
+            asyncio.run(self._recupereListe())
 
     def nouveau(self, titre: str = "", description:str = "", tags: list[str] = []) -> None:
         todo = dict()
@@ -69,9 +71,16 @@ class ListeTodo:
         uuid_pattern = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$"
         return re.match(uuid_pattern, texte)
             
-    def _recupereListe(self):
+    async def _recupere_todo(self, fichier: str) -> None:
+        async with aiofiles.open(f"{self._repertoire}/{fichier}", 'r') as f:
+            todo = await f.read()
+            ListeTodo._liste.append(json.loads(todo))
+    
+    async def _recupereListe(self):
         
         # TODO Gèrer le fait que le répertoire n'existe peut-être pas
+        print("_recupereListe")
+        fichers_filtres = []
         fichers = os.listdir(self._repertoire)
         for fichier in fichers:
             if not os.path.isdir(os.path.join(self._repertoire, fichier)):
@@ -79,8 +88,11 @@ class ListeTodo:
                 nom = split[0]
                 extension = split[1]
                 if self._valide_uuid(nom) and extension == ".json":
-                    with open(f"{self._repertoire}/{fichier}", 'r') as f:
-                        ListeTodo._liste.append(json.load(f))
+                    fichers_filtres.append(fichier)
+        if fichers_filtres:
+            #ff = [asyncio.create_task(self._recupere_todo(f)) for f in fichers_filtres]
+            print("gather")
+            await asyncio.gather(*(self._recupere_todo(f) for f in fichers_filtres))
     
     def _sauvegarde(self, todo: dict) -> None:
         if not os.path.exists(self._repertoire):
