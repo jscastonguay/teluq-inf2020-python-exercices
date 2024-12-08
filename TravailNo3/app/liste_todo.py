@@ -50,9 +50,13 @@ class ListeTodo:
     _liste: list[dict] = []
     
     def __init__(self, repertoire: str) -> None:
-        if ListeTodo._liste == []:
+        
+        # Le test est nécessaire puisque ListeTodo est un singleton
+        if ListeTodo._liste == [] and ListeTodo._repertoire == "":
             ListeTodo._repertoire: str = repertoire
-            asyncio.run(self._recupereListe())
+            liste_fichiers = self._get_liste_fichiers()
+            if liste_fichiers:
+                asyncio.run(self._recupere_liste(liste_fichiers))
 
     def nouveau(self, titre: str = "", description:str = "", tags: list[str] = []) -> None:
         todo = dict()
@@ -70,16 +74,12 @@ class ListeTodo:
     def _valide_uuid(self, texte: str):
         uuid_pattern = "^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$"
         return re.match(uuid_pattern, texte)
-            
-    async def _recupere_todo(self, fichier: str) -> None:
-        async with aiofiles.open(f"{self._repertoire}/{fichier}", 'r') as f:
-            todo = await f.read()
-            ListeTodo._liste.append(json.loads(todo))
-    
-    async def _recupereListe(self):
+
+    def _get_liste_fichiers(self) -> list[str]:
         
         # TODO Gèrer le fait que le répertoire n'existe peut-être pas
-        print("_recupereListe")
+        #      Cérer le répertoire
+        
         fichers_filtres = []
         fichers = os.listdir(self._repertoire)
         for fichier in fichers:
@@ -89,10 +89,16 @@ class ListeTodo:
                 extension = split[1]
                 if self._valide_uuid(nom) and extension == ".json":
                     fichers_filtres.append(fichier)
-        if fichers_filtres:
-            #ff = [asyncio.create_task(self._recupere_todo(f)) for f in fichers_filtres]
-            print("gather")
-            await asyncio.gather(*(self._recupere_todo(f) for f in fichers_filtres))
+        return fichers_filtres
+    
+    async def _recupere_todo(self, fichier: str) -> None:
+        async with aiofiles.open(f"{self._repertoire}/{fichier}", 'r') as f:
+            todo = await f.read()
+            ListeTodo._liste.append(json.loads(todo))
+    
+    async def _recupere_liste(self, fichers_filtres: list[str]) -> None:
+        assert len(fichers_filtres) != 0
+        await asyncio.gather(*(self._recupere_todo(f) for f in fichers_filtres))
     
     def _sauvegarde(self, todo: dict) -> None:
         if not os.path.exists(self._repertoire):
@@ -130,14 +136,3 @@ class ListeTodo:
         
     def get_nb(self):
         return len(ListeTodo._liste)
-
-
-if __name__ == "__main__":
-    liste = ListeTodo("todo")
-    #liste.nouveau("Ceci est un test")
-    #liste._recupereListe()
-    #print(liste._liste)
-    print(liste.get("3f5d27ae-aa78-11ef-b89c-98541b76ef66"))
-    print("===================================================================")
-    print(liste.get())
-    liste.enleve("3f5d27ae-aa78-11ef-b89c-98541b76ef66")
