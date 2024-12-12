@@ -5,12 +5,12 @@ import sys
 
 app = Flask(__name__)
 liste = ListeTodo("todo")
-conditions_filtre = ConditionsFiltre()
+conditions = Conditions()
 
 @app.route("/")
 def index():
-    listeComplete = liste.get(filtre=conditions_filtre)        
-    return render_template("index.html", liste = listeComplete, filtre = conditions_filtre)
+    listeComplete = liste.get(conditions=conditions)        
+    return render_template("index.html", liste = listeComplete, filtre = conditions)
 
 
 @app.route("/ajoute",  methods = ['GET', 'POST'])
@@ -63,11 +63,18 @@ def modifie():
 def filtre():
     action = request.form['action']
     if action == 'reset':
-        conditions_filtre.reset()
+        conditions.reset()
     if action == 'applique':
-        conditions_filtre.etats = request.form.getlist('filtre-etat')
-        conditions_filtre.tags = request.form["filtre-tags"].split(',')
-        conditions_filtre.tags = [tag.strip() for tag in conditions_filtre.tags]
+        conditions.etats = request.form.getlist('filtre-etat')
+        conditions.tags = request.form["filtre-tags"].split(',')
+        conditions.tags = [tag.strip() for tag in conditions.tags]
+    return redirect("/")
+
+
+@app.route('/tri', methods=['POST'])
+def tri():
+    conditions.choix_tri = request.form.getlist('tri-selection')
+    print(f"tri: {conditions.choix_tri}")
     return redirect("/")
     
     

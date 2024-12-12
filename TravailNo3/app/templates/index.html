@@ -28,6 +28,20 @@
   <input type="text" id="filtre-tags" name="filtre-tags" value="{{ ', '.join(filtre.tags) }}">
 </form>
 <hr>
+<p>Tri</p>
+<form method="POST" action="/tri" id="tri">
+  <div class="form-buttons">
+    <button type="submit" name="action" value="applique">Applique</button>
+  </div>
+  <label for="tri-selection">Élément:</label>
+  <select id="tri-selection" name="tri-selection">
+    <option value="DATES_CROISSANTES" {% if "DATES_CROISSANTES" == filtre.choix_tri %} selected {% endif %}>Dates croissantes</option>
+    <option value="DATES_DECROISSANTES" {% if "DATES_DECROISSANTES" == filtre.choix_tri %} selected {% endif %}>Dates décroissantes</option>
+    <option value="TITRES_CROISSANTS" {% if "TITRES_CROISSANTS" == filtre.choix_tri %} selected {% endif %}>Titres croissants</option>
+    <option value="TITRES_DECROISSANTS" {% if "TITRES_DECROISSANTS" == filtre.choix_tri %} selected {% endif %}>Titres décroissants</option>
+  </select>
+</form>
+<hr>
 <form method="POST" action="/submit">
   <div class="form-buttons">
     <button type="submit" name="action" value="efface">Efface</button>

@@ -11,22 +11,31 @@ class Etat(Enum):
     OUVERT = 0
     EN_COURS = 1
     FERMEE = 2
+    
+class ChoixTri(Enum):
+    DATES_CROISSANTES = 0
+    DATES_DECROISSANTES = 1
+    TITRES_CROISSANTS = 2
+    TITRES_DECROISSANTS = 3
 
 
 class ErreurInterne(Exception):
     pass
 
 
-class ConditionsFiltre:
+class Conditions:
     def __init__(self) -> None:
         self.etats: list[Etat] = [Etat.OUVERT.name, Etat.EN_COURS.name, Etat.FERMEE.name]
+        #self.choix_tri: str = ChoixTri.DATES_DECROISSANTES.name
+        self.choix_tri: str = ChoixTri.TITRES_DECROISSANTS.name
         self.tags: list[str] = []
         
     def reset(self) -> None:
         self.etats: list[Etat] = [Etat.OUVERT.name, Etat.EN_COURS.name, Etat.FERMEE.name]
+        self.choix_tri: str = ChoixTri.DATES_DECROISSANTES.name
         self.tags: list[str] = []
         
-    def applique(self, element):
+    def applique_filtre(self, element):
         '''
         Si les filtres sont vides, les éléments ne sont pas filtrés.
         '''                
@@ -41,8 +50,37 @@ class ConditionsFiltre:
                 if tag in self.tags:
                     tagsTrouves = True
         return etatsTrouves and tagsTrouves
-
+    
+    def applique_tri(self, liste: list[dict]) -> list[dict]:
+        #print(f"type: {type(self.choix_tri)}")
+        #assert self.choix_tri in ChoixTri.__members__
         
+        print('######################################')
+        print(f"self.choix_tri.name: {self.choix_tri}")
+        
+        def element(e):
+            match self.choix_tri:
+                case ChoixTri.DATES_CROISSANTES.name | ChoixTri.DATES_DECROISSANTES.name:
+                    print(e["date_creation"])
+                    return e["date_creation"]
+                case ChoixTri.TITRES_CROISSANTS.name | ChoixTri.TITRES_DECROISSANTS.name:
+                    print(e["titre"])
+                    return e["titre"]
+                case _:
+                    return e["date_creation"]
+                
+            #print(e["titre"])
+            #return e["titre"]
+        #print(f"liste: {liste}")
+        l = sorted(liste, reverse=ChoixTri.DATES_DECROISSANTES.name or ChoixTri.TITRES_DECROISSANTS.name, key=element)
+        
+        print(f"l: {l}")
+        print('######################################')
+        
+        return l
+        #return liste
+    
+    
 class ListeTodo:
     
     # Singleton
@@ -106,7 +144,7 @@ class ListeTodo:
         with open(f"{self._repertoire}/{todo["uuid"]}.json", "w") as f:
             f.write(json.dumps(todo))
     
-    def get(self, uuid: str = "", filtre: ConditionsFiltre = None) -> list[dict]:
+    def get(self, uuid: str = "", conditions: Conditions = None) -> list[dict]:
         if uuid:
             todo = list(filter(lambda element: element["uuid"] == uuid, ListeTodo._liste))
             if todo == None:
@@ -115,8 +153,10 @@ class ListeTodo:
                 raise ErreurInterne("Plusieurs todo associé à ce uuid")
             return todo
         
-        if filtre:            
-            return list(filter(filtre.applique, ListeTodo._liste))
+        if conditions:            
+            l = list(filter(conditions.applique_filtre, ListeTodo._liste))
+            l = conditions.applique_tri(l)
+            return l
         else:
             return ListeTodo._liste
         
