@@ -1,1 +1,1 @@
-{"uuid": "0c5b02f2-b112-11ef-a743-98541b76ef66", "date_creation": "2024-12-02 20:00:54", "etat": "OUVERT", "titre": "nouveau", "description": "description", "tags": ["toto", "tata"]}
+{"uuid": "0c5b02f2-b112-11ef-a743-98541b76ef66", "date_creation": "2024-12-02 20:00:54", "etat": "FERMEE", "titre": "nouveau", "description": "description\r\n\r\n\r\nEncore une autre description.", "tags": ["toto", "tata"]}
