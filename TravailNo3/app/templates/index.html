@@ -48,7 +48,6 @@
         <th>Date creation</th>
         <th>État</th>
         <th>Titre</th>
-        <!-- <th>Description</th> -->
         <th>tags</th>
       </tr>
     </thead>
@@ -65,7 +64,6 @@
         <td class="min" class="min">Fermé</td>
         {% endif %}
         <td>{{ todo["titre"] }}</td>
-        <!-- <td>{{ todo["description"] }}</td> -->
         <td>{{ ", ".join(todo["tags"]) }}</td>
       </tr>
       {% endfor %}
