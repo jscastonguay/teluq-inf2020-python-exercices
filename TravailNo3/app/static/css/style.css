@@ -1,3 +1,76 @@
 h1 {
-    text-decoration: underline solid
+    /*text-decoration: solid;
+    color: white;
+    background-color: #9BBEA9;
+    display: inline;*/
+
+    
+    text-align: center;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #123;
+    color: white;
+    /*min-height: 50vh;*/
+    padding: 0px;
+    position: static;
+    top: 0;
+  
+}
+
+/*body {
+    background-color: #C4C6C8;
+}*/
+
+button {
+    background-color: #A37762;
+
+    color: #fff;
+    margin:5px auto;
+    border:none;
+    border-radius:10px;
+    box-shadow: 0px 0px 2px 2px #A37762;
+    padding:10px;
+    min-height:20px; 
+    min-width: 80px;
+}
+button:hover {
+    background-color:#002ead;
+    transition: 0.1s;
+}
+
+table,
+th,
+td {
+    /* border: 1px solid; */
+    border-collapse: collapse;
+    width: auto;
+    padding: 12px 15px;
+
+    font-size: 0.9em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin: 25px 0;
+}
+
+table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+td.min {
+    width: 1%;
+    white-space: nowrap;
 }

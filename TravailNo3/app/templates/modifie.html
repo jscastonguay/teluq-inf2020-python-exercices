@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Liste{% endblock %}
+{% block title %}Détails{% endblock %}
 {% block head %}
 {{ super() }}
 <style type="text/css">
@@ -9,7 +9,7 @@
 </style>
 {% endblock %}
 {% block content %}
-<h1>Modifie un todo</h1>
+<h1>Détails</h1>
 <form method="POST">
   <label for="titre">Titre:</label>
   <input type="text" id="titre" name="titre" value='{{ todo["titre"]}}'><br>
@@ -23,9 +23,9 @@
     <option value="EN_COURS" {% if todo["etat"] == "EN_COURS" %} selected {% endif %}>En cours</option>
     <option value="FERMEE" {% if todo["etat"] == "FERMEE" %} selected {% endif %}>Fermé</option>
   </select><br>
-  <input type="submit" value="Modifie">
+  <input type="submit" value="Sauvegarde">
   <button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "
-    class="button">Cancel</button>
+    class="button">Annule</button>
 </form>
 
 {% endblock %}
