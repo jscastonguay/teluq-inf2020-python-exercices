@@ -15,16 +15,24 @@
 </div>
 <div class="filtre">
   <form method="POST" action="/filtre" id="filtre">
-    <label for="filtre-etat">États:</label>
-    <select id="filtre-etat" name="filtre-etat" multiple>
-      <option value="OUVERT" {% if "OUVERT" in filtre.etats %} selected {% endif %}>Ouvert</option>
-      <option value="EN_COURS" {% if "EN_COURS" in filtre.etats %} selected {% endif %}>En cours</option>
-      <option value="FERMEE" {% if "FERMEE" in filtre.etats %} selected {% endif %}>Fermé</option>
-    </select>
-    <label for="filtre-tags">Tags:</label>
-    <input type="text" id="filtre-tags" name="filtre-tags" value="{{ ', '.join(filtre.tags) }}">
-    <button type="submit" name="action" value="applique">Applique</button>
-    <button type="submit" name="action" value="reset">Réinitialise</button>
+    <div class="form-container">
+      <div class="form-group">
+        <label for="filtre-etat">États</label>
+        <select id="filtre-etat" name="filtre-etat" multiple>
+          <option value="OUVERT" {% if "OUVERT" in filtre.etats %} selected {% endif %}>Ouvert</option>
+          <option value="EN_COURS" {% if "EN_COURS" in filtre.etats %} selected {% endif %}>En cours</option>
+          <option value="FERMEE" {% if "FERMEE" in filtre.etats %} selected {% endif %}>Fermé</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="filtre-tags">Tags</label>
+        <input type="text" id="filtre-tags" name="filtre-tags" value="{{ ', '.join(filtre.tags) }}">
+      </div>
+      <div class="form-group">
+        <button type="submit" name="action" value="applique">Applique</button>
+        <button type="submit" name="action" value="reset">Réinitialise</button>
+      </div>
+    </div>
   </form>
 </div>
 <hr>
