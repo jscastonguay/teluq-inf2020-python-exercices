@@ -12,13 +12,13 @@
 <h1>Ajoute un todo</h1>
 <form method="POST">
   <div class="form-group"><label for="titre">Titre</label>
-    <input type="text" id="titre" name="titre"><br>
+    <input class="element-texte" type="text" id="titre" name="titre"><br>
   </div>
   <div class="form-group"><label for="description">Description</label>
-    <input type="text" id="description" name="description"><br>
+    <textarea class="element-texte" type="text" id="description" name="description" rows="20"></textarea><br>
   </div>
   <div class="form-group"><label for="tags">Tags (séparés par des virgules)</label>
-    <input type="text" id="tags" name="tags"><br>
+    <input class="element-texte" type="text" id="tags" name="tags"><br>
   </div>
   <input type="submit" value="Ajouter">
   <button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "

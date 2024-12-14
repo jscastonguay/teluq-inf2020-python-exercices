@@ -14,7 +14,7 @@
   <!-- <div class="form-container"> -->
     <div class="form-group">
       <label for="État">État</label>
-      <select name="etat" id="etat" value='{{ todo["etat"]}}'>
+      <select class="etats" name="etat" id="etat" value='{{ todo["etat"]}}'>
         <option value="OUVERT" {% if todo["etat"]=="OUVERT" %} selected {% endif %}>Ouvert</option>
         <option value="EN_COURS" {% if todo["etat"]=="EN_COURS" %} selected {% endif %}>En cours</option>
         <option value="FERMEE" {% if todo["etat"]=="FERMEE" %} selected {% endif %}>Fermé</option>
@@ -22,15 +22,15 @@
     </div>
     <div class="form-group">
       <label for="titre">Titre</label>
-      <input type="text" id="titre" name="titre" value='{{ todo["titre"]}}'><br>
+      <input class="element-texte" type="text" id="titre" name="titre" value='{{ todo["titre"]}}'><br>
     </div>
     <div class="form-group">
       <label for="description">Description</label>
-      <input type="text" id="description" name="description" value='{{ todo["description"]}}'><br>
+      <textarea class="element-texte" type="text" id="description" name="description" value='{{ todo["description"]}}' rows="20"></textarea><br>
     </div>
     <div class="form-group">
       <label for="tags">Tags (séparés par des virgules)</label>
-      <input type="text" id="tags" name="tags" value='{{ ", ".join(todo["tags"]) }}'><br>
+      <input class="element-texte" type="text" id="tags" name="tags" value='{{ ", ".join(todo["tags"]) }}'><br>
     </div>
     
       <input type="submit" value="Sauvegarde">

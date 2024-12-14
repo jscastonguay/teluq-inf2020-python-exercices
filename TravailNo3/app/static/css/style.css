@@ -13,7 +13,7 @@ h1 {
 h2 {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    color: #9fd3c7;
+    color: #142d4c;
     padding: 0px;
     position: static;
     top: 0;
@@ -133,4 +133,12 @@ label {
 
 select[multiple]:focus option:checked {
     background: #142d4c linear-gradient(0deg, #142d4c 0%, #142d4c 100%);
-  }
+}
+
+.element-texte {
+    max-width: 900px;
+}
+
+.etats {
+    width: 100px;
+}
