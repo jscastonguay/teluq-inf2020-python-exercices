@@ -126,3 +126,11 @@ label {
     position: static;
     top: 0;
 }
+
+.selection-color {
+    accent-color: #142d4c;
+}
+
+select[multiple]:focus option:checked {
+    background: #142d4c linear-gradient(0deg, #142d4c 0%, #142d4c 100%);
+  }

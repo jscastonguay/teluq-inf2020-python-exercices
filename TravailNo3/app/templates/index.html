@@ -55,7 +55,7 @@
     <tbody>
       {% for todo in liste %}
       <tr>
-        <td class="min"><input type="radio" name="uuid_selectionnee" value="{{ todo['uuid'] }}" required></td>
+        <td class="min"><input class="selection-color" type="radio" name="uuid_selectionnee" value="{{ todo['uuid'] }}" required></td>
         <td class="min">{{ todo["date_creation"] }}</td>
         {% if todo["etat"] == "OUVERT" %}
         <td class="min">Ouvert</td>
