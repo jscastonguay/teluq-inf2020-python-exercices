@@ -9,7 +9,7 @@
 </style>
 {% endblock %}
 {% block content %}
-<h1>Ajoute un todo</h1>
+<h1>Nouveau TODO</h1>
 <form method="POST">
   <div class="form-group"><label for="titre">Titre</label>
     <input class="element-texte" type="text" id="titre" name="titre"><br>
@@ -20,8 +20,8 @@
   <div class="form-group"><label for="tags">Tags (séparés par des virgules)</label>
     <input class="element-texte" type="text" id="tags" name="tags"><br>
   </div>
-  <input type="submit" value="Ajouter">
-  <button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "
-    class="button">Cancel</button>
+  <input class="style-bouton" type="submit" value="Sauvegarder">
+  <button class="style-bouton" id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "
+    class="button">Annuler</button>
 </form>
 {% endblock %}

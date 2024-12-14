@@ -33,8 +33,8 @@
       <input class="element-texte" type="text" id="tags" name="tags" value='{{ ", ".join(todo["tags"]) }}'><br>
     </div>
     
-      <input type="submit" value="Sauvegarde">
-      <button id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "
+      <input class="style-bouton" type="submit" value="Sauvegarde">
+      <button class="style-bouton" id="ajoute" type="button" onclick="window.location.href = '{{ url_for('index') }}' ; "
         class="button">Annule</button>
   <!-- </div> -->
 </form>
