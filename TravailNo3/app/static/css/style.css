@@ -4,7 +4,7 @@ h1 {
     background-color: #9BBEA9;
     display: inline;*/
 
-    
+
     text-align: center;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
@@ -14,7 +14,37 @@ h1 {
     padding: 0px;
     position: static;
     top: 0;
-  
+
+}
+
+h2 {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #123;
+    /*min-height: 50vh;*/
+    padding: 0px;
+    position: static;
+    top: 0;
+}
+
+.header-button {
+    /*position: absolute;*/
+    left: 50%;
+    top: 50%;
+    /*transform: translate(-50%, -50%);*/
+    margin: 10pt auto;
+    display: block;
+    font-size: 2em;
+}
+
+.filtre {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin: auto;
+    width: 50%;
+    padding: 10px;
 }
 
 /*body {
@@ -25,17 +55,26 @@ button {
     background-color: #A37762;
 
     color: #fff;
-    margin:5px auto;
-    border:none;
-    border-radius:10px;
+    margin: 5px auto;
+    border: none;
+    border-radius: 10px;
     box-shadow: 0px 0px 2px 2px #A37762;
-    padding:10px;
-    min-height:20px; 
+    padding: 10px;
+    min-height: 20px;
     min-width: 80px;
 }
+
 button:hover {
-    background-color:#002ead;
+    background-color: #002ead;
     transition: 0.1s;
+}
+
+.button-inline {
+    display: flex;
+    gap: 10px;
+    /* Espacement entre les éléments */
+    align-items: center;
+    /* Centre les boutons verticalement */
 }
 
 table,
